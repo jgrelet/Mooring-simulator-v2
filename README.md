@@ -7,13 +7,7 @@ A sample GUI application [python-menus-toolbar](https://realpython.com/python-me
 To run this application, you need to [install `PyQt5`](https://realpython.com/python-pyqt-gui-calculator/#installing-pyqt) on your Python environment. To do that, you can run the following commands in a terminal or command prompt:
 
 ```sh
-pip3 install PyQt5
-```
-
-or if you have conda installed
-
-```sh
-conda install -c conda-forge qt qtpy qt5-applications qt5-tools xlrd
+pip3 install PyQt5 qt5-applications qt5-tools xlrd
 ```
 
 Once you have [PyQt](https://www.riverbankcomputing.com/static/Docs/PyQt5/) installed, you can run the application by executing the following command:
