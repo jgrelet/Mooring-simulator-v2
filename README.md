@@ -9,6 +9,7 @@ To run this application, you need to [install `PyQt5`](https://realpython.com/py
 ```sh
 pip3 install PyQt5
 ```
+
 or if you have conda installed
 
 ```sh
