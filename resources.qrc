@@ -1,0 +1,25 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file alias="file-new.png">resources/file-new.png</file>
+    <file alias="file-open.png">resources/file-open.png</file>
+    <file alias="file-save.png">resources/file-save.png</file>
+    <file alias="file-saveas.png">resources/file-saveas.png</file>
+    <file alias="file-exit.png">resources/file-exit.png</file>
+    <file alias="edit-copy.png">resources/edit-copy.png</file>
+    <file alias="edit-cut.png">resources/edit-cut.png</file>
+    <file alias="edit-paste.png">resources/edit-paste.png</file>
+    <file alias="edit-paste.png">resources/edit-paste.png</file>
+    <file alias="zoom-in.png">resources/zoom-in.png</file>
+    <file alias="zoom-out.png">resources/zoom-out.png</file>
+    <file alias="windows-main.ico">resources/windows-main.ico</file>
+    <file alias="refresh.png">resources/refresh.png</file>
+    <file alias="play.png">resources/play.png</file>
+    <file alias="home.png">resources/home.png</file>
+    <file alias="library-load.png">resources/library-load.png</file>
+    <file alias="library-load-2.png">resources/library-load-2.png</file>
+    <file alias="library-show.png">resources/library-show.png</file>
+    <file alias="spreadsheet.png">resources/spreadsheet.png</file>
+    <file alias="gnumeric.png">resources/gnumeric.png</file>
+    <file alias="python-icon.png">resources/python-icon.png</file>
+</qresource>
+</RCC>
