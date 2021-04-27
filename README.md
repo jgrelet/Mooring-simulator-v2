@@ -42,10 +42,7 @@ This command will read resources.qrc and generate qrc_resources.py containing th
 
 ## About the Author
 
-Leodanis Pozo Ramos – [@lpozo78](https://twitter.com/lpozo78) – lpozor78@gmail.com
 
 ## License
 
 - This application is distributed under the MIT license. See `LICENSE` for details.
-
-- The set of icons used in this application are part of the [TurkinOS](https://github.com/llamaret/turkinos-icon) icon theme, which is distributed under the [GPL v3.0 license](https://github.com/llamaret/turkinos-icon/blob/master/LICENSE). See `resources/LICENSE` for details.
