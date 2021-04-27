@@ -42,7 +42,6 @@ This command will read resources.qrc and generate qrc_resources.py containing th
 
 ## About the Author
 
-
 ## License
 
 - This application is distributed under the MIT license. See `LICENSE` for details.
