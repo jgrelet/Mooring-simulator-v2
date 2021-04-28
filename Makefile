@@ -37,7 +37,7 @@ test:
 	$(PYTHON) -m unittest  discover -v  $(TEST_PATH)
 	
 build:
-	pyinstaller -wF --clean $(MAIN)
+	pyinstaller -wF -c --clean $(MAIN)
 
 run:
 	$(PYTHON) $(MAIN)
