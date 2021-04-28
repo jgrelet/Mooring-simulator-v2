@@ -1,6 +1,6 @@
 # Sample PyQt Application
 
-A sample GUI application [python-menus-toolbar](https://realpython.com/python-menus-toolbars/) that shows how to create and use menus, toolbars, and status bars using Python and PyQt.
+A new GUI application based on [python-menus-toolbar](https://realpython.com/python-menus-toolbars/) that shows how to create and use menus, toolbars, and status bars using Python and PyQt.
 
 ## How to Run this Application
 
@@ -15,6 +15,8 @@ Once you have [PyQt](https://www.riverbankcomputing.com/static/Docs/PyQt5/) inst
 ```sh
 python Mooring-simulator.py
 python Mooring-simulator.py -h
+python Mooring-simulator.py --lib library\test.xls
+
 usage: 
 python MooringSimulator.py --file <file> --lib <file> -d -h   
 
@@ -30,6 +32,20 @@ optional arguments:
 ```
 
 This command will launch the application, so you'll be able to experiment with it.
+
+## Makefile
+
+If you have installed make, you can run the following commands to automate processes:
+
+```sh
+make run
+make lib
+make build
+make runc
+make clean
+```
+
+Make for Windows, see [Chocolatey](https://chocolatey.org/), The Package Manager for Windows and [GNU make 4.3](https://community.chocolatey.org/packages/make)
 
 ## Using Icons and Resources in PyQt
 
