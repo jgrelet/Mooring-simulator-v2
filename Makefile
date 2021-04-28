@@ -31,7 +31,7 @@ else
 endif
 
 lint:
-	$(PYLINT) --exclude=.tox
+	$(PYLINT) $(MAIN)
 
 test: 
 	$(PYTHON) -m unittest  discover -v  $(TEST_PATH)
