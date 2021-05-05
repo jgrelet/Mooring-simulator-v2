@@ -11,9 +11,11 @@
 import sys
 from functools import partial
 from math import floor
-from os import startfile
+from os import startfile, path
+from pathlib import Path
 import argparse
 import logging
+import toml
 
 from PyQt5.QtCore import Qt, QObject, pyqtSignal
 from PyQt5.QtGui import QIcon, QKeySequence
@@ -491,9 +493,36 @@ def processArgs():
                         action='store_true')
     return parser
 
+def getDefaultConfig():
+    toml_string = """
+    [global]
+    author         = "jgrelet IRD March 2021"
+    debug          = false
+    echo           = true
+
+    [tools]
+    name = 'tools/Angulate.xls'
+
+    [config]
+    origin = 'surface'  # or bottom
+    library = 'library/Library.xls'
+    """
+    return toml.loads(toml_string)
 
 if __name__ == "__main__":
     ''' Mooring simulator program entry point''' 
+
+    # setup toml configuration file
+    theConfig = Path(path.expandvars('$APPDATA/' + __file__)).with_suffix('.toml')
+    if path.isfile(theConfig):
+        cfg = toml.load(theConfig)
+        print(cfg['global']['debug'])
+    else:
+        print (f"Configuration file don't exist, create one from default config to {theConfig}")
+        with open(theConfig, 'w') as f:
+            toml.dump(getDefaultConfig(), f)
+        cfg = toml.load(theConfig)
+        print(cfg['global']['debug'])
 
     # Recover and process optionnal line arguments
     parser = processArgs()
@@ -523,4 +552,12 @@ if __name__ == "__main__":
     win.show()
 
     # Run the event loop
-    sys.exit(app.exec_())
+    ret = app.exec_()
+    
+    # save current config
+    debug = cfg['global']['debug'] 
+    cfg['global']['debug'] = not debug
+    with open(theConfig, 'w') as f:
+        toml.dump(cfg, f)
+    # exit
+    sys.exit(ret)
