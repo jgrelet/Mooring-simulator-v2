@@ -254,7 +254,7 @@ class Window(QMainWindow, QObject):
 
         # Configuration actions
         self.setenvConfigurationAction = QAction(
-            "Set environnemental conditions", self)
+            "Set environnemental conditions", self, checkable=True)
 
         # Simulate actions
         self.startSimulateAction = QAction(
@@ -553,7 +553,7 @@ if __name__ == "__main__":
 
     # Run the event loop
     ret = app.exec_()
-    
+
     # save current config
     debug = cfg['global']['debug'] 
     cfg['global']['debug'] = not debug
