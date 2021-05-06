@@ -1,4 +1,6 @@
-# Sample PyQt Application
+# Sample Mooring simulator PyQt Application version 2
+
+See the [roadmap](https://github.com/users/jgrelet/projects/1).
 
 A new GUI application based on [python-menus-toolbar](https://realpython.com/python-menus-toolbars/) that shows how to create and use menus, toolbars, and status bars using Python and PyQt.
 
