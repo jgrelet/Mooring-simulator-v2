@@ -35,6 +35,8 @@ from PyQt5.QtWidgets import (
 import qrc_resources
 from WidgetLibrary import WidgetLibrary
 
+VERSION = "1.2.1"
+
 
 class Window(QMainWindow, QObject):
     """Main Window."""
@@ -43,7 +45,7 @@ class Window(QMainWindow, QObject):
     trigger = pyqtSignal()
 
     def __init__(self, screen_width, screen_height, library_file_name='',
-                 file_name='',):
+                 file_name=''):
         """In the class initializer .__init__(), you first call the parent class
         QMainWindow initializer using super(). Then you set the title of the window 
         using .setWindowTitle() and resize the window using .resize()."""
@@ -495,34 +497,44 @@ def processArgs():
 
 def getDefaultConfig():
     toml_string = """
+
     [global]
-    author         = "jgrelet IRD March 2021"
-    debug          = false
-    echo           = true
+    author  = "jgrelet IRD March 2021"
+    debug   = false
+    echo    = true
 
     [tools]
     name = 'tools/Angulate.xls'
 
     [config]
     origin = 'surface'  # or bottom
+    bottom_depth = 0
     library = 'library/Library.xls'
     """
     return toml.loads(toml_string)
+
+def saveDefaultConfig():
+        with open(theConfig, 'w') as fid:
+            cfg = getDefaultConfig()
+            cfg['version'] = VERSION
+            toml.dump(cfg, fid)
+
 
 if __name__ == "__main__":
     ''' Mooring simulator program entry point''' 
 
     # setup toml configuration file
     theConfig = Path(path.expandvars('$APPDATA/' + __file__)).with_suffix('.toml')
-    if path.isfile(theConfig):
-        cfg = toml.load(theConfig)
-        print(cfg['global']['debug'])
-    else:
+    if not path.isfile(theConfig):
         print (f"Configuration file don't exist, create one from default config to {theConfig}")
-        with open(theConfig, 'w') as f:
-            toml.dump(getDefaultConfig(), f)
+        saveDefaultConfig()
+
+    cfg = toml.load(theConfig)
+    if not "version" in cfg or cfg["version"] != VERSION:
+        saveDefaultConfig()
         cfg = toml.load(theConfig)
-        print(cfg['global']['debug'])
+
+    print(f"Version: {cfg['version']}, debug: {cfg['global']['debug']}")
 
     # Recover and process optionnal line arguments
     parser = processArgs()
