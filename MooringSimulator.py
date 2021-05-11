@@ -35,7 +35,7 @@ from PyQt5.QtWidgets import (
 import qrc_resources
 from WidgetLibrary import WidgetLibrary
 
-VERSION = "1.2.1"
+VERSION = "1.2.1.0"
 
 
 class Window(QMainWindow, QObject):
@@ -511,7 +511,7 @@ def getDefaultConfig():
     [config]
     origin = 'surface'  # or bottom
     bottom_depth = 0
-    library = 'library/Library.xls'
+    library = 'library/example.xls'
     """
     return toml.loads(toml_string)
 
