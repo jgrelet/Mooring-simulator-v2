@@ -539,6 +539,11 @@ if __name__ == "__main__":
     # Recover and process optionnal line arguments
     parser = processArgs()
     args = parser.parse_args()
+    if args.lib is None:
+        library = path.normpath(cfg['config']['library'])
+    else:
+        library = args.lib
+
 
     # Create the application
     app = QApplication([])
@@ -560,7 +565,7 @@ if __name__ == "__main__":
         screen_width, screen_height = 800, 600
 
     # Create and show the main window
-    win = Window(screen_width, screen_height, args.lib)
+    win = Window(screen_width, screen_height, library)
     win.show()
 
     # Run the event loop
