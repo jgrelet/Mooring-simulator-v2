@@ -80,6 +80,8 @@ class Window(QMainWindow, QObject):
         # self._createContextMenu()
         self._connectActions()
         self._createStatusBar()
+
+        # need to be modify because the path of the library is defined in the config file now
         # if library = args.lib not empty, load library directly
         if self.libraryFileName:
             self.loadLibrary()
