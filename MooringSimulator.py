@@ -18,7 +18,7 @@ import logging
 import toml
 
 from PyQt5.QtCore import Qt, QObject, pyqtSignal
-from PyQt5.QtGui import QIcon, QKeySequence
+from PyQt5.QtGui import QIcon, QKeySequence, QPixmap
 from PyQt5.QtWidgets import (
     QAction,
     QApplication,
@@ -31,6 +31,7 @@ from PyQt5.QtWidgets import (
     QStyle,
     QFileDialog,
     QDockWidget,
+    QSplashScreen,
 )
 import qrc_resources
 from WidgetLibrary import WidgetLibrary
@@ -493,6 +494,8 @@ def processArgs():
     parser.add_argument('-s', '--size',
                         nargs='+', type=int, default=[],
                         help='select screen size, default is 800 x 600')
+    parser.add_argument('-r', '--reset', help='reset toml configuration file to default',
+                        action='store_true')
     parser.add_argument('-d', '--debug', help='display debug informations',
                         action='store_true')
     return parser
@@ -504,6 +507,8 @@ def getDefaultConfig():
     author  = "jgrelet IRD March 2021"
     debug   = false
     echo    = true
+    screen_width = 800
+    screen_height = 600
 
     [tools]
     name = 'tools/Angulate.xls'
@@ -531,24 +536,38 @@ if __name__ == "__main__":
         print (f"Configuration file don't exist, create one from default config to {theConfig}")
         saveDefaultConfig()
 
+    # if no match in the version numbers, we reload the default configuration
     cfg = toml.load(theConfig)
     if not "version" in cfg or cfg["version"] != VERSION:
         saveDefaultConfig()
         cfg = toml.load(theConfig)
 
+    # debug
     print(f"Version: {cfg['version']}, debug: {cfg['global']['debug']}")
 
     # Recover and process optionnal line arguments
     parser = processArgs()
     args = parser.parse_args()
+    # load command line given library 
     if args.lib is None:
         library = path.normpath(cfg['config']['library'])
     else:
         library = args.lib
 
+    # reset config file
+    if args.reset:
+        saveDefaultConfig()
+        cfg = toml.load(theConfig)
+
 
     # Create the application
     app = QApplication([])
+
+    # Create and show splash screen
+    pixmap = QPixmap(":splash.png")
+    splash = QSplashScreen(pixmap)
+    splash.show()
+    app.processEvents()
 
     # print(QStyleFactory.keys())
     app.setStyle("Fusion")
@@ -556,27 +575,31 @@ if __name__ == "__main__":
     # Setting the Application Icon on Windows
     app.setWindowIcon(QIcon(":windows-main.ico"))
 
-    # Set application windows size, 800 x 600 by defaulft
+    # Set application window size, 800 x 600 by default
     if len(args.size) == 1:
         screen_resolution = app.desktop().screenGeometry()
-        screen_width, screen_height = screen_resolution.width(
-        ), screen_resolution.height()
+        screen_width, screen_height = \
+            screen_resolution.width(), screen_resolution.height()
     elif len(args.size) == 2:
         screen_width, screen_height = args.size[0], args.size[1]
     else:
-        screen_width, screen_height = 800, 600
+        screen_width, screen_height = cfg['global']['screen_width'], cfg['global']['screen_height']
 
     # Create and show the main window
-    win = Window(screen_width, screen_height, library)
-    win.show()
+    window = Window(screen_width, screen_height, library)
+    window.show()
+    # Close the splash screen
+    splash.finish(window)
 
     # Run the event loop
     ret = app.exec_()
 
-    # save current config
+    # debug config
     debug = cfg['global']['debug'] 
     cfg['global']['debug'] = not debug
+
+    # Save current config
     with open(theConfig, 'w') as f:
         toml.dump(cfg, f)
-    # exit
+    # Exit
     sys.exit(ret)

@@ -24,6 +24,9 @@ endif
 lint:
 	$(PYLINT) $(MAIN)
 
+res:
+	pyrcc5 -o qrc_resources.py resources.qrc
+
 test: 
 	$(PYTHON) -m unittest  discover -v  $(TEST_PATH)
 	

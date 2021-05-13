@@ -21,5 +21,6 @@
     <file alias="spreadsheet.png">resources/spreadsheet.png</file>
     <file alias="gnumeric.png">resources/gnumeric.png</file>
     <file alias="python-icon.png">resources/python-icon.png</file>
+    <file alias="splash.png">resources/splash.png</file>
 </qresource>
 </RCC>

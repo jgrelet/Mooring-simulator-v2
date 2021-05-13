@@ -40,6 +40,7 @@ This command will launch the application, so you'll be able to experiment with i
 If you have installed make, you can run the following commands to automate processes:
 
 ```sh
+make res
 make run
 make lib
 make build
@@ -70,6 +71,10 @@ pyrcc5 -o qrc_resources.py resources.qrc
 ```
 
 This command will read resources.qrc and generate qrc_resources.py containing the binary code for each resource. You’ll be able to use those resources in your Python code by importing qrc_resources.
+
+```sh
+make res
+```
 
 ## About the Author
 
