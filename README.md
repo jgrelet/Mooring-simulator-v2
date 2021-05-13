@@ -30,6 +30,7 @@ optional arguments:
   --lib LIB             Libray definition file, Excel or JSON 
   -s SIZE [SIZE ...], --size SIZE [SIZE ...]
                         select screen size, default is 800 x 600
+  -r, --reset           reset toml configuration file to default
   -d, --debug           display debug informations
 ```
 
@@ -71,6 +72,8 @@ pyrcc5 -o qrc_resources.py resources.qrc
 ```
 
 This command will read resources.qrc and generate qrc_resources.py containing the binary code for each resource. You’ll be able to use those resources in your Python code by importing qrc_resources.
+
+Generate ressource file from makefile:
 
 ```sh
 make res
