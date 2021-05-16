@@ -47,7 +47,7 @@ from WidgetLibrary import WidgetLibrary
 VERSION = "1.2.1.0"
 
 
-class Window(QMainWindow, QObject):
+class MainWindow(QMainWindow, QObject):
     """Main Window."""
 
     # defined a signal named trigger as class attribute
@@ -58,7 +58,7 @@ class Window(QMainWindow, QObject):
         """In the class initializer .__init__(), you first call the parent class
         QMainWindow initializer using super(). Then you set the title of the window 
         using .setWindowTitle() and resize the window using .resize()."""
-        super(Window, self).__init__()
+        super(MainWindow, self).__init__()
         self.setWindowTitle("Mooring simulator v2.0")
         self.screen_width = cfg['global']['screen_width']
         self.screen_height = cfg['global']['screen_height']
@@ -455,8 +455,8 @@ class Window(QMainWindow, QObject):
         self.config.setWindowTitle('Global configuration')
         dlgLayout = QVBoxLayout()
         formLayout = QFormLayout()
-        screen_width = QLineEdit(str(self.cfg['global']['screen_width']))
-        screen_height = QLineEdit(str(self.cfg['global']['screen_height']))
+        screen_width = QLineEdit(str(self.frameGeometry().width()))
+        screen_height = QLineEdit(str(self.frameGeometry().height()))
         originCombo = QComboBox()
         originCombo.addItems(["bottom", "surface"])
         index = originCombo.findText(self.cfg['config']['origin'], Qt.MatchFixedString)
@@ -541,7 +541,6 @@ class Window(QMainWindow, QObject):
 
     def handle_trigger(self):
         self.wcLabel.setText(f"{self.getWordCount()} Words")
-
 
 def processArgs():
     parser = argparse.ArgumentParser(
@@ -641,25 +640,31 @@ if __name__ == "__main__":
     # Set application window size, 800 x 600 by default
     if len(args.size) == 1:
         screen_resolution = app.desktop().screenGeometry()
-        screen_width, screen_height = \
+        cfg['global']['screen_width'], cfg['global']['screen_height'] = \
             screen_resolution.width(), screen_resolution.height()
     elif len(args.size) == 2:
-        screen_width, screen_height = args.size[0], args.size[1]
+        cfg['global']['screen_width'], cfg['global']['screen_height'] = \
+            args.size[0], args.size[1]
     else:
-        screen_width, screen_height = cfg['global']['screen_width'], cfg['global']['screen_height']
+        pass
 
     # Create and show the main window
-    window = Window(cfg, library)
-    window.show()
+    mainWindow = MainWindow(cfg, library)
+    mainWindow.show()
     # Close the splash screen
-    #splash.finish(window)
+    #splash.finish(mainWindow)
 
     # Run the event loop
     ret = app.exec_()
 
-    # debug config
+    # Get the main windows size and update configuration for next use
+    cfg['global']['screen_width'] = mainWindow.frameGeometry().width()
+    cfg['global']['screen_height'] = mainWindow.frameGeometry().height()
+
+    # Debug config
     debug = cfg['global']['debug'] 
     cfg['global']['debug'] = not debug
+    print(f"Geometry: {cfg['global']['screen_width']} x {cfg['global']['screen_height']}")
 
     # Save current config
     with open(theConfig, 'w') as f:
