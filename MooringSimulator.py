@@ -22,6 +22,8 @@ from PyQt5.QtGui import QIcon, QKeySequence, QPixmap
 from PyQt5.QtWidgets import (
     QAction,
     QApplication,
+    QComboBox,
+    QWidget,
     QLabel,
     QMainWindow,
     QMenu,
@@ -32,6 +34,12 @@ from PyQt5.QtWidgets import (
     QFileDialog,
     QDockWidget,
     QSplashScreen,
+    QFormLayout,
+    QLineEdit,
+    QStackedLayout,
+    QPushButton,
+    QDialogButtonBox,
+    QVBoxLayout,
 )
 import qrc_resources
 from WidgetLibrary import WidgetLibrary
@@ -45,16 +53,17 @@ class Window(QMainWindow, QObject):
     # defined a signal named trigger as class attribute
     trigger = pyqtSignal()
 
-    def __init__(self, screen_width, screen_height, library_file_name='',
+    def __init__(self, cfg, library_file_name='',
                  file_name=''):
         """In the class initializer .__init__(), you first call the parent class
         QMainWindow initializer using super(). Then you set the title of the window 
         using .setWindowTitle() and resize the window using .resize()."""
         super(Window, self).__init__()
         self.setWindowTitle("Mooring simulator v2.0")
-        self.screen_width = screen_width
-        self.screen_height = screen_height
+        self.screen_width = cfg['global']['screen_width']
+        self.screen_height = cfg['global']['screen_height']
         self.resize(self.screen_width, self.screen_height)
+        self.cfg = cfg
         self.fileName = file_name
         self.libraryFileName = library_file_name
 
@@ -146,6 +155,7 @@ class Window(QMainWindow, QObject):
 
         # Configuration menu
         configurationMenu = menuBar.addMenu("&Configuration")
+        configurationMenu.addAction(self.globalConfigurationAction)
         configurationMenu.addAction(self.setenvConfigurationAction)
 
         # Simulate menu
@@ -258,8 +268,11 @@ class Window(QMainWindow, QObject):
         # self.loadLibraryAction.setShortcut(QKeySequence.Paste)
 
         # Configuration actions
+        self.globalConfigurationAction = QAction(
+            "Set global configuration", self)
         self.setenvConfigurationAction = QAction(
             "Set environnemental conditions", self, checkable=True)
+        
 
         # Simulate actions
         self.startSimulateAction = QAction(
@@ -340,8 +353,8 @@ class Window(QMainWindow, QObject):
         self.openExcelLibraryAction.triggered.connect(self.openExcelLibrary)
 
         # Connect Configuration actions
-        self.setenvConfigurationAction.triggered.connect(
-            self.setenvConfiguration)
+        self.globalConfigurationAction.triggered.connect(self.globalConfiguration)
+        self.setenvConfigurationAction.triggered.connect(self.setenvConfiguration)
 
         # Connect Simulate actions
         self.startSimulateAction.triggered.connect(self.startSimulate)
@@ -433,10 +446,60 @@ class Window(QMainWindow, QObject):
         #self.centralWidget.setText("<b> Library > openExcel </b> clicked")
         startfile(self.libraryFileName)
 
+    def globalConfiguration(self):
+
+        # Create the stacked layout
+        self.stackedLayout = QStackedLayout()
+        # create the configuration panel
+        self.config = QWidget()
+        self.config.setWindowTitle('Global configuration')
+        dlgLayout = QVBoxLayout()
+        formLayout = QFormLayout()
+        screen_width = QLineEdit(str(self.cfg['global']['screen_width']))
+        screen_height = QLineEdit(str(self.cfg['global']['screen_height']))
+        originCombo = QComboBox()
+        originCombo.addItems(["bottom", "surface"])
+        index = originCombo.findText(self.cfg['config']['origin'], Qt.MatchFixedString)
+        if index >= 0:
+             originCombo.setCurrentIndex(index)
+        # connect signal to function selectOrigin, pass argument with functools.partial
+        originCombo.activated.connect(partial(self.selectOrigin, originCombo))
+        bottom_depth = QLineEdit(str(self.cfg['config']['bottom_depth']))
+        formLayout.addRow("Screen width", screen_width)
+        formLayout.addRow("Screen height", screen_height)
+        formLayout.addRow("Origin", originCombo)
+        formLayout.addRow("Bottom depth", bottom_depth)
+        #self.setText(0,"Contact Details")
+        btnBox = QDialogButtonBox()
+        btnBox.setStandardButtons(
+            QDialogButtonBox.Ok | QDialogButtonBox.Cancel
+        )
+        btnBox.accepted.connect(self.acceptConfig)
+        btnBox.rejected.connect(self.cancelConfig)
+        # Set the layout on the dialog
+        dlgLayout.addLayout(formLayout)
+        dlgLayout.addWidget(btnBox)
+        self.config.setLayout(dlgLayout)
+ 
+        self.stackedLayout.addWidget(self.config)
+        #self.setCentralWidget(self.config)
+
+    def selectOrigin(self, comboBox):
+        print(f"Origin Selected: {comboBox.currentText()}")
+        self.cfg['config']['origin'] = comboBox.currentText()
+
+    def acceptConfig(self):
+        print(f"{self.screen_width}")
+        print(f"{self.screen_height}")
+
+    def cancelConfig(self):
+        print("Configuration cancelled...")
+
+
     def setenvConfiguration(self):
         # Logic for pasting content goes here...
         self.centralWidget.setText(
-            "<b>Configuration > Set environnemental conditions</b> clicked")
+            "<b>setenv Configuration</b> clicked")
 
     def startSimulate(self):
         # Logic for pasting content goes here...
@@ -564,9 +627,9 @@ if __name__ == "__main__":
     app = QApplication([])
 
     # Create and show splash screen
-    pixmap = QPixmap(":splash.png")
-    splash = QSplashScreen(pixmap)
-    splash.show()
+    # pixmap = QPixmap(":splash.png")
+    # splash = QSplashScreen(pixmap)
+    # splash.show()
     app.processEvents()
 
     # print(QStyleFactory.keys())
@@ -586,10 +649,10 @@ if __name__ == "__main__":
         screen_width, screen_height = cfg['global']['screen_width'], cfg['global']['screen_height']
 
     # Create and show the main window
-    window = Window(screen_width, screen_height, library)
+    window = Window(cfg, library)
     window.show()
     # Close the splash screen
-    splash.finish(window)
+    #splash.finish(window)
 
     # Run the event loop
     ret = app.exec_()
