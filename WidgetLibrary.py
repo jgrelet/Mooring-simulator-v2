@@ -45,11 +45,12 @@ class WidgetLibrary(QWidget):
         #sheet_names = library.worksheets
 
     def read(self):
-         # read and onvert Excel file to JSON to python dict
+        ''' read and convert Excel file to JSON to python dict'''
         return excel2json(self.fileName)
 
     
     def display(self):
+        ''' display library inside MDI window '''
         libraryArea = QMdiArea(self)
         library = self.library.toDict()
         for worksheet in self.library.worksheets:
