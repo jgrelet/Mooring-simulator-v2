@@ -463,6 +463,8 @@ class MainWindow(QMainWindow, QObject):
         if index >= 0:
              originCombo.setCurrentIndex(index)
         # connect signal to function selectOrigin, pass argument with functools.partial
+        screen_width.textEdited.connect(partial(self.selectScreenWidth, screen_width))
+        #screen_width.textEdited.connect(self.selectScreenWidth)
         originCombo.activated.connect(partial(self.selectOrigin, originCombo))
         bottom_depth = QLineEdit(str(self.cfg['config']['bottom_depth']))
         formLayout.addRow("Screen width", screen_width)
@@ -484,13 +486,16 @@ class MainWindow(QMainWindow, QObject):
         self.stackedLayout.addWidget(self.config)
         #self.setCentralWidget(self.config)
 
+    def selectScreenWidth(self, width):
+        print(f"New width: {width.text()}")
+        self.cfg['global']['screen_width'] = width.text()
+
     def selectOrigin(self, comboBox):
         print(f"Origin Selected: {comboBox.currentText()}")
         self.cfg['config']['origin'] = comboBox.currentText()
 
     def acceptConfig(self):
-        print(f"{self.screen_width}")
-        print(f"{self.screen_height}")
+        print(f"{self.cfg['global']['screen_width']} x {self.cfg['global']['screen_height']}")
 
     def cancelConfig(self):
         print("Configuration cancelled...")
