@@ -32,12 +32,12 @@ class ConfigWindow(QWidget):
        # overloading operators
     def __getitem__(self, key):
         ''' overload r[key] '''
-        # if key not in self.__data:
-        #     logging.error(
-        #         " file_extractor.py: invalid key: \"{}\"".format(key))
-        # else:
-        #     return self.__data[key]
-        return self.__cfg[key]
+        if key not in self.__cfg:
+            #logging.error(
+            print(" file_extractor.py: invalid key: \"{}\"".format(key))
+            return None
+        else:
+            return self.__cfg[key]
         
     def globalConfiguration(self):
     

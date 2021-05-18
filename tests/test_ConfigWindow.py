@@ -6,12 +6,17 @@ from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QWidget
 """The tests individually instantiate the top-level window as a QWidget."""
 
-from ConfigWindow import ConfigWindow
+from configWindow import ConfigWindow
 
 '''
 Run all test_* in dir test:
 > python -m unittest  discover tests -v
 > python -m unittest  discover -s tests -p 'test_*.py' -v
+or
+> make test
+or configure testing with VSC. 
+To enable testing, use the Python: Configure Tests command on the Command Palette.
+See: https://code.visualstudio.com/docs/python/testing
 '''
 
 # Create an application global accessible from all tests.
@@ -64,6 +69,11 @@ class testConfigWindow(unittest.TestCase):
         d = self.cfg['config']
         for k in d.keys():
             self.assertEqual(d[k], self.config[k])
+
+    def test_false(self):
+        ''' test block ['false']'''
+        d = self.cfg['false']
+        self.assertEqual(d, None)
 
    
 

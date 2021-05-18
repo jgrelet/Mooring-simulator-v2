@@ -42,7 +42,7 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
 )
 import qrc_resources
-from WidgetLibrary import WidgetLibrary
+from libraryWidget import WidgetLibrary
 
 VERSION = "1.2.1.0"
 
