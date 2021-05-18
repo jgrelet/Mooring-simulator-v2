@@ -11,7 +11,6 @@ import toml
 class ConfigWindow(QWidget):
     ''' This class display configuration window, and save in toml file
     '''
-
     def __init__(self, appName, version):
         super(QWidget, self).__init__()
 
@@ -19,7 +18,6 @@ class ConfigWindow(QWidget):
          # setup toml configuration file, may be move in init function.
         self.configFile = Path(path.expandvars('$APPDATA/' + appName)).with_suffix('.toml')
         if not path.isfile(self.configFile):
-            print(f"Configuration file don't exist, create one from default config to {self.configFile}")
             self.saveDefaultConfig()
         self.__cfg = toml.load(self.configFile)
         if not "version" in self.__cfg or self.__cfg["version"] != version:
@@ -50,8 +48,8 @@ class ConfigWindow(QWidget):
 
         
     def displayGlobalConfig(self):
-    
-        # build and display the configuration panel
+        """ Build and display the configuration panel
+        """
         self.setWindowTitle('Global configuration')
         dlgLayout = QVBoxLayout()
         formLayout = QFormLayout()
@@ -67,7 +65,6 @@ class ConfigWindow(QWidget):
         formLayout.addRow("Screen height", self.screen_height)
         formLayout.addRow("Origin", self.reference)
         formLayout.addRow("Bottom depth", self.bottom_depth)
-        #self.setText(0,"Contact Details")
         btnBox = QDialogButtonBox()
         btnBox.setStandardButtons(
             QDialogButtonBox.Ok | QDialogButtonBox.Cancel
@@ -82,10 +79,6 @@ class ConfigWindow(QWidget):
         #self.stackedLayout.addWidget(self.config)
         #self.setCentralWidget(self.config)
 
-    def selectOrigin(self, comboBox):
-        print(f"Origin Selected: {comboBox.currentText()}")
-        self.__cfg['config']['origin'] = comboBox.currentText()
-
     def accept(self):
         self.__cfg['global']['screen_width'] = int(self.screen_width.text())
         self.__cfg['global']['screen_height'] = int(self.screen_height.text())
@@ -95,7 +88,7 @@ class ConfigWindow(QWidget):
         self.close()
 
     def cancel(self):
-        print("Configuration cancelled...")
+        #print("Configuration cancelled...")
         self.close()
     
     # Save current config
@@ -104,6 +97,7 @@ class ConfigWindow(QWidget):
             toml.dump(self.__cfg, fid)
 
     def saveDefaultConfig(self):
+        print(f"Configuration file don't exist, create one from default config to {self.configFile}")
         with open(self.configFile, 'w') as fid:
             cfg = ConfigWindow.getDefaultConfig()
             cfg['version'] = self.version
@@ -138,9 +132,9 @@ if __name__ == "__main__":
 
     # remove path and file extention, get only the filename
     appName = Path(__file__).with_suffix('').stem
+
     cfg = ConfigWindow(appName, "1.02")
     cfg.displayGlobalConfig() 
-
     cfg.show()
 
     # Run the event loop
