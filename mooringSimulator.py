@@ -48,16 +48,20 @@ VERSION = "1.2.1.0"
 
 
 class MainWindow(QMainWindow, QObject):
-    """Main Window."""
+    """Main window of the Mooring Simulator application
+    The MainWindows class inherits from QMainWindow which is a prefabricated widget providing
+    many standard window features that are used in the application, including toolbars, menus, a status bar and more,
+    menus, status bar, dockable widgets and more
+    """
 
     # defined a signal named trigger as class attribute
     trigger = pyqtSignal()
 
-    def __init__(self, cfg, library_file_name='',
-                 file_name=''):
+    def __init__(self, cfg, library_file_name='', file_name=''):
         """In the class initializer .__init__(), you first call the parent class
         QMainWindow initializer using super(). Then you set the title of the window 
-        using .setWindowTitle() and resize the window using .resize()."""
+        using .setWindowTitle() and resize the window using .resize()
+        """
         super(MainWindow, self).__init__()
         self.setWindowTitle("Mooring simulator v2.0")
         self.screen_width = cfg['global']['screen_width']
