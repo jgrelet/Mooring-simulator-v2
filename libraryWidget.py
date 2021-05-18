@@ -25,7 +25,7 @@ from PyQt5.QtWidgets import (
 from excel2json import excel2json
 
 
-class WidgetLibrary(QWidget):
+class LibraryWidget(QWidget):
     ''' this class display library'''
 
     def __init__(self, filename):

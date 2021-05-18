@@ -42,7 +42,7 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
 )
 import qrc_resources
-from libraryWidget import WidgetLibrary
+from libraryWidget import LibraryWidget
 
 VERSION = "1.2.1.0"
 
@@ -416,7 +416,7 @@ class MainWindow(QMainWindow, QObject):
 
     def loadLibrary(self):
         self.editToolBar.setDisabled(False)
-        self.library = WidgetLibrary(self.libraryFileName)
+        self.library = LibraryWidget(self.libraryFileName)
         self.library.setMinimumWidth(floor(self.screen_width/2))
         self.library.setMinimumHeight(200)
         self.libraryDockWidget = QDockWidget()
