@@ -42,38 +42,38 @@ class ConfigWindow(QWidget):
             return None
         else:
             return self.__cfg[key]
+
+    def __str__(self):
+        print(f"Window size = {self.__cfg['global']['screen_width']} x {self.__cfg['global']['screen_height']}")
+        print(f"Reference = {self.__cfg['config']['reference']}")
+        return(f"Bottom depth = {self.__cfg['config']['bottom_depth']}")
+
         
     def displayGlobalConfig(self):
     
-        # create the configuration panel
-        #self.config = QWidget()
-        #self.config.setWindowTitle('Global configuration')
+        # build and display the configuration panel
         self.setWindowTitle('Global configuration')
         dlgLayout = QVBoxLayout()
         formLayout = QFormLayout()
-        screen_width = QLineEdit(str(self.frameGeometry().width()))
-        screen_height = QLineEdit(str(self.frameGeometry().height()))
-        originCombo = QComboBox()
-        originCombo.addItems(["bottom", "surface"])
-        index = originCombo.findText(self.__cfg['config']['origin'], Qt.MatchFixedString)
+        self.screen_width = QLineEdit(str(self.__cfg['global']['screen_width']))
+        self.screen_height = QLineEdit(str(self.__cfg['global']['screen_height']))
+        self.reference = QComboBox()
+        self.reference.addItems(["bottom", "surface"])
+        index = self.reference.findText(self.__cfg['config']['reference'], Qt.MatchFixedString)
         if index >= 0:
-             originCombo.setCurrentIndex(index)
-        # connect signal to function selectOrigin, pass argument with functools.partial
-        screen_width.textEdited.connect(partial(self.selectScreenWidth, screen_width))
-        #screen_width.textEdited.connect(self.selectScreenWidth)
-        originCombo.activated.connect(partial(self.selectOrigin, originCombo))
-        bottom_depth = QLineEdit(str(self.__cfg['config']['bottom_depth']))
-        formLayout.addRow("Screen width", screen_width)
-        formLayout.addRow("Screen height", screen_height)
-        formLayout.addRow("Origin", originCombo)
-        formLayout.addRow("Bottom depth", bottom_depth)
+             self.reference.setCurrentIndex(index)
+        self.bottom_depth = QLineEdit(str(self.__cfg['config']['bottom_depth']))
+        formLayout.addRow("Screen width", self.screen_width)
+        formLayout.addRow("Screen height", self.screen_height)
+        formLayout.addRow("Origin", self.reference)
+        formLayout.addRow("Bottom depth", self.bottom_depth)
         #self.setText(0,"Contact Details")
         btnBox = QDialogButtonBox()
         btnBox.setStandardButtons(
             QDialogButtonBox.Ok | QDialogButtonBox.Cancel
         )
-        btnBox.accepted.connect(self.acceptConfig)
-        btnBox.rejected.connect(self.cancelConfig)
+        btnBox.accepted.connect(self.accept)
+        btnBox.rejected.connect(self.cancel)
         # Set the layout on the dialog
         dlgLayout.addLayout(formLayout)
         dlgLayout.addWidget(btnBox)
@@ -82,20 +82,27 @@ class ConfigWindow(QWidget):
         #self.stackedLayout.addWidget(self.config)
         #self.setCentralWidget(self.config)
 
-    def selectScreenWidth(self, width):
-        print(f"New width: {width.text()}")
-        self.__cfg['global']['screen_width'] = width.text()
-
     def selectOrigin(self, comboBox):
         print(f"Origin Selected: {comboBox.currentText()}")
         self.__cfg['config']['origin'] = comboBox.currentText()
 
-    def acceptConfig(self):
-        print(f"{self.__cfg['global']['screen_width']} x {self.__cfg['global']['screen_height']}")
+    def accept(self):
+        self.__cfg['global']['screen_width'] = int(self.screen_width.text())
+        self.__cfg['global']['screen_height'] = int(self.screen_height.text())
+        self.__cfg['config']['reference'] = str(self.reference.currentText())
+        self.__cfg['config']['bottom_depth'] = int(self.bottom_depth.text())
+        self.saveConfig()
+        self.close()
 
-    def cancelConfig(self):
+    def cancel(self):
         print("Configuration cancelled...")
+        self.close()
     
+    # Save current config
+    def saveConfig(self): 
+        with open(self.configFile, 'w') as fid:
+            toml.dump(self.__cfg, fid)
+
     def saveDefaultConfig(self):
         with open(self.configFile, 'w') as fid:
             cfg = ConfigWindow.getDefaultConfig()
@@ -116,7 +123,7 @@ class ConfigWindow(QWidget):
         name = 'tools/Angulate.xls'
 
         [config]
-        origin = 'surface'  # or bottom
+        reference = 'surface'  # or bottom
         bottom_depth = 0
         library = 'library/example.xls'
         """
@@ -129,12 +136,14 @@ if __name__ == "__main__":
     # Create the application
     app = QApplication([])
 
+    # remove path and file extention, get only the filename
     appName = Path(__file__).with_suffix('').stem
-    cfg = ConfigWindow(appName, "1.0")
+    cfg = ConfigWindow(appName, "1.02")
     cfg.displayGlobalConfig() 
 
     cfg.show()
 
     # Run the event loop
     app.exec_()
+    print(cfg)
 
