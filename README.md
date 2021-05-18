@@ -42,6 +42,7 @@ If you have installed make, you can run the following commands to automate proce
 
 ```sh
 make res
+make test
 make run
 make lib
 make build
