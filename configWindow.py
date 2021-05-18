@@ -1,7 +1,7 @@
 """ConfigWindow class, part of Mooring simulator PyQt5 application."""
 
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import Qt #, QObject, pyqtSignal
+from PyQt5.QtCore import QSize, Qt #, QObject, pyqtSignal
 from functools import partial
 from os import startfile, path
 from pathlib import Path
@@ -16,7 +16,7 @@ class ConfigWindow(QWidget):
         super(QWidget, self).__init__()
 
         self.version = version
-         # setup toml configuration file
+         # setup toml configuration file, may be move in init function.
         self.configFile = Path(path.expandvars('$APPDATA/' + appName)).with_suffix('.toml')
         if not path.isfile(self.configFile):
             print(f"Configuration file don't exist, create one from default config to {self.configFile}")
@@ -25,6 +25,10 @@ class ConfigWindow(QWidget):
         if not "version" in self.__cfg or self.__cfg["version"] != version:
             self.saveDefaultConfig()
             self.__cfg = toml.load(self.configFile)
+
+        # Lock the window to a fixed size. In Qt sizes are defined using a QSize object. 
+        # This accepts width and height parameters in that order
+        self.setFixedSize(QSize(250,200))
 
         # Create the stacked layout
         #self.stackedLayout = QStackedLayout()
