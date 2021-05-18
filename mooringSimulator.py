@@ -276,7 +276,6 @@ class MainWindow(QMainWindow, QObject):
             "Set global configuration", self)
         self.setenvConfigurationAction = QAction(
             "Set environnemental conditions", self, checkable=True)
-        
 
         # Simulate actions
         self.startSimulateAction = QAction(
@@ -357,8 +356,10 @@ class MainWindow(QMainWindow, QObject):
         self.openExcelLibraryAction.triggered.connect(self.openExcelLibrary)
 
         # Connect Configuration actions
-        self.globalConfigurationAction.triggered.connect(self.globalConfiguration)
-        self.setenvConfigurationAction.triggered.connect(self.setenvConfiguration)
+        self.globalConfigurationAction.triggered.connect(
+            self.globalConfiguration)
+        self.setenvConfigurationAction.triggered.connect(
+            self.setenvConfiguration)
 
         # Connect Simulate actions
         self.startSimulateAction.triggered.connect(self.startSimulate)
@@ -463,12 +464,14 @@ class MainWindow(QMainWindow, QObject):
         screen_height = QLineEdit(str(self.frameGeometry().height()))
         originCombo = QComboBox()
         originCombo.addItems(["bottom", "surface"])
-        index = originCombo.findText(self.cfg['config']['origin'], Qt.MatchFixedString)
+        index = originCombo.findText(
+            self.cfg['config']['origin'], Qt.MatchFixedString)
         if index >= 0:
-             originCombo.setCurrentIndex(index)
+            originCombo.setCurrentIndex(index)
         # connect signal to function selectOrigin, pass argument with functools.partial
-        screen_width.textEdited.connect(partial(self.selectScreenWidth, screen_width))
-        #screen_width.textEdited.connect(self.selectScreenWidth)
+        screen_width.textEdited.connect(
+            partial(self.selectScreenWidth, screen_width))
+        # screen_width.textEdited.connect(self.selectScreenWidth)
         originCombo.activated.connect(partial(self.selectOrigin, originCombo))
         bottom_depth = QLineEdit(str(self.cfg['config']['bottom_depth']))
         formLayout.addRow("Screen width", screen_width)
@@ -486,9 +489,9 @@ class MainWindow(QMainWindow, QObject):
         dlgLayout.addLayout(formLayout)
         dlgLayout.addWidget(btnBox)
         self.config.setLayout(dlgLayout)
- 
+
         self.stackedLayout.addWidget(self.config)
-        #self.setCentralWidget(self.config)
+        # self.setCentralWidget(self.config)
 
     def selectScreenWidth(self, width):
         print(f"New width: {width.text()}")
@@ -499,11 +502,11 @@ class MainWindow(QMainWindow, QObject):
         self.cfg['config']['origin'] = comboBox.currentText()
 
     def acceptConfig(self):
-        print(f"{self.cfg['global']['screen_width']} x {self.cfg['global']['screen_height']}")
+        print(
+            f"{self.cfg['global']['screen_width']} x {self.cfg['global']['screen_height']}")
 
     def cancelConfig(self):
         print("Configuration cancelled...")
-
 
     def setenvConfiguration(self):
         # Logic for pasting content goes here...
@@ -551,6 +554,7 @@ class MainWindow(QMainWindow, QObject):
     def handle_trigger(self):
         self.wcLabel.setText(f"{self.getWordCount()} Words")
 
+
 def processArgs():
     parser = argparse.ArgumentParser(
         description='Mooring simulator program ',
@@ -570,6 +574,7 @@ def processArgs():
     parser.add_argument('-d', '--debug', help='display debug informations',
                         action='store_true')
     return parser
+
 
 def getDefaultConfig():
     toml_string = """
@@ -591,20 +596,23 @@ def getDefaultConfig():
     """
     return toml.loads(toml_string)
 
+
 def saveDefaultConfig():
-        with open(theConfig, 'w') as fid:
-            cfg = getDefaultConfig()
-            cfg['version'] = VERSION
-            toml.dump(cfg, fid)
+    with open(theConfig, 'w') as fid:
+        cfg = getDefaultConfig()
+        cfg['version'] = VERSION
+        toml.dump(cfg, fid)
 
 
 if __name__ == "__main__":
-    ''' Mooring simulator program entry point''' 
+    ''' Mooring simulator program entry point'''
 
     # setup toml configuration file
-    theConfig = Path(path.expandvars('$APPDATA/' + __file__)).with_suffix('.toml')
+    theConfig = Path(path.expandvars(
+        '$APPDATA/' + __file__)).with_suffix('.toml')
     if not path.isfile(theConfig):
-        print (f"Configuration file don't exist, create one from default config to {theConfig}")
+        print(
+            f"Configuration file don't exist, create one from default config to {theConfig}")
         saveDefaultConfig()
 
     # if no match in the version numbers, we reload the default configuration
@@ -619,7 +627,7 @@ if __name__ == "__main__":
     # Recover and process optionnal line arguments
     parser = processArgs()
     args = parser.parse_args()
-    # load command line given library 
+    # load command line given library
     if args.lib is None:
         library = path.normpath(cfg['config']['library'])
     else:
@@ -629,7 +637,6 @@ if __name__ == "__main__":
     if args.reset:
         saveDefaultConfig()
         cfg = toml.load(theConfig)
-
 
     # Create the application
     app = QApplication([])
@@ -661,7 +668,7 @@ if __name__ == "__main__":
     mainWindow = MainWindow(cfg, library)
     mainWindow.show()
     # Close the splash screen
-    #splash.finish(mainWindow)
+    # splash.finish(mainWindow)
 
     # Run the event loop
     ret = app.exec_()
@@ -671,9 +678,10 @@ if __name__ == "__main__":
     cfg['global']['screen_height'] = mainWindow.frameGeometry().height()
 
     # Debug config
-    debug = cfg['global']['debug'] 
+    debug = cfg['global']['debug']
     cfg['global']['debug'] = not debug
-    print(f"Geometry: {cfg['global']['screen_width']} x {cfg['global']['screen_height']}")
+    print(
+        f"Geometry: {cfg['global']['screen_width']} x {cfg['global']['screen_height']}")
 
     # Save current config
     with open(theConfig, 'w') as f:
