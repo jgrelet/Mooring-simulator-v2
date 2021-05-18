@@ -42,8 +42,9 @@ class ConfigWindow(QWidget):
     def displayGlobalConfig(self):
     
         # create the configuration panel
-        self.config = QWidget()
-        self.config.setWindowTitle('Global configuration')
+        #self.config = QWidget()
+        #self.config.setWindowTitle('Global configuration')
+        self.setWindowTitle('Global configuration')
         dlgLayout = QVBoxLayout()
         formLayout = QFormLayout()
         screen_width = QLineEdit(str(self.frameGeometry().width()))
@@ -72,7 +73,7 @@ class ConfigWindow(QWidget):
         # Set the layout on the dialog
         dlgLayout.addLayout(formLayout)
         dlgLayout.addWidget(btnBox)
-        self.config.setLayout(dlgLayout)
+        self.setLayout(dlgLayout)
  
         #self.stackedLayout.addWidget(self.config)
         #self.setCentralWidget(self.config)
@@ -128,7 +129,7 @@ if __name__ == "__main__":
     cfg = ConfigWindow(appName, "1.0")
     cfg.displayGlobalConfig() 
 
-    cfg.config.show()
+    cfg.show()
 
     # Run the event loop
     app.exec_()
