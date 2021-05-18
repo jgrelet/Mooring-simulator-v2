@@ -6,6 +6,8 @@ from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QWidget
 """The tests individually instantiate the top-level window as a QWidget."""
 
+from PyQt5.QtTest import QTest
+
 from configWindow import ConfigWindow
 
 '''
@@ -33,6 +35,7 @@ class testConfigWindow(unittest.TestCase):
 
         """Initialisation des tests."""
         self.cfg = ConfigWindow("ConfigWindow", "1.0")
+        self.cfg.displayGlobalConfig()
 
         self.glob = {
             'author': "jgrelet IRD March 2021",
@@ -47,7 +50,7 @@ class testConfigWindow(unittest.TestCase):
         }
 
         self.config = {
-            'origin': 'surface',  # or bottom
+            'reference': 'surface',  # or bottom
             'bottom_depth': 0,
             'library': 'library/example.xls'
         }
@@ -70,10 +73,16 @@ class testConfigWindow(unittest.TestCase):
         for k in d.keys():
             self.assertEqual(d[k], self.config[k])
 
-    def test_false(self):
-        ''' test block ['false']'''
-        d = self.cfg['false']
-        self.assertEqual(d, None)
+    # def test_false(self):
+    #     ''' test block ['false']'''
+    #     d = self.cfg['false']
+    #     self.assertEqual(d, None)
+
+    def test_gui(self):
+        self.assertEqual(int(self.cfg.screen_width.text()), self.glob['screen_width'])
+        self.assertEqual(int(self.cfg.screen_height.text()), self.glob['screen_height'])
+        self.assertEqual(self.cfg.reference.currentText(), self.config['reference'])
+        self.assertEqual(int(self.cfg.bottom_depth.text()), self.config['bottom_depth'])
 
    
 
