@@ -1,7 +1,7 @@
 """ConfigWindow class, part of Mooring simulator PyQt5 application."""
 
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import QSize, Qt #, QObject, pyqtSignal
+from PyQt5.QtCore import QSize, Qt, QObjectCleanupHandler #, QObject, pyqtSignal
 from functools import partial
 from os import startfile, path
 from pathlib import Path
@@ -56,7 +56,7 @@ class ConfigWindow(QWidget):
         self.screen_width = QLineEdit(str(self.__cfg['global']['screen_width']))
         self.screen_height = QLineEdit(str(self.__cfg['global']['screen_height']))
         self.reference = QComboBox()
-        self.reference.addItems(["bottom", "surface"])
+        self.reference.addItems([ "surface","bottom"])
         index = self.reference.findText(self.__cfg['config']['reference'], Qt.MatchFixedString)
         if index >= 0:
              self.reference.setCurrentIndex(index)
@@ -86,6 +86,9 @@ class ConfigWindow(QWidget):
         self.__cfg['config']['bottom_depth'] = int(self.bottom_depth.text())
         self.saveConfig()
         self.close()
+        # prevent QWidget::setLayout: Attempting to set QLayout which already has a layout
+        # in displayGlobalConfig::self.setLayout(dlgLayout)
+        QObjectCleanupHandler().add(self.layout())
 
     def cancel(self):
         #print("Configuration cancelled...")
