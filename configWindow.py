@@ -68,15 +68,15 @@ class ConfigWindow(QWidget):
         formLayout.addRow("Screen height", self.screen_height)
         formLayout.addRow("Origin", self.reference)
         formLayout.addRow("Bottom depth", self.bottom_depth)
-        btnBox = QDialogButtonBox()
-        btnBox.setStandardButtons(
+        self.btnBox = QDialogButtonBox()
+        self.btnBox.setStandardButtons(
             QDialogButtonBox.Ok | QDialogButtonBox.Cancel
         )
-        btnBox.accepted.connect(self.accept)
-        btnBox.rejected.connect(self.cancel)
+        self.btnBox.accepted.connect(self.accept)
+        self.btnBox.rejected.connect(self.cancel)
         # Set the layout on the dialog
         dlgLayout.addLayout(formLayout)
-        dlgLayout.addWidget(btnBox)
+        dlgLayout.addWidget(self.btnBox)
         self.setLayout(dlgLayout)
  
         #self.stackedLayout.addWidget(self.config)

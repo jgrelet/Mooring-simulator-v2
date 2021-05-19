@@ -1,5 +1,6 @@
 import unittest
 import sys
+from PyQt5.QtCore import  Qt
 from PyQt5.QtWidgets import QApplication
 """All tests use the same single global instance of QApplication."""
 
@@ -26,14 +27,8 @@ app= QApplication( sys.argv )
 
 class testConfigWindow(unittest.TestCase):
 
-    def create_application_window( self ):
-        w = QWidget()
-        return w
-
     def setUp( self ):
-        self.window = self.create_application_window()
-
-        """Initialisation des tests."""
+        """Initialize"""
         self.cfg = ConfigWindow("ConfigWindow", "1.0")
         self.cfg.displayGlobalConfig()
 
@@ -78,11 +73,25 @@ class testConfigWindow(unittest.TestCase):
     #     d = self.cfg['false']
     #     self.assertEqual(d, None)
 
-    def test_gui(self):
+    def test_default_gui(self):
+        ''' test default GUI '''
         self.assertEqual(int(self.cfg.screen_width.text()), self.glob['screen_width'])
         self.assertEqual(int(self.cfg.screen_height.text()), self.glob['screen_height'])
         self.assertEqual(self.cfg.reference.currentText(), self.config['reference'])
         self.assertEqual(int(self.cfg.bottom_depth.text()), self.config['bottom_depth'])
+
+    def test_input_gui(self):
+        ''' test input GUI '''
+        # Clear and then type "1024" into the lineEdit widget
+        self.cfg.screen_width.clear()
+        QTest.keyClicks(self.cfg.screen_width, "1024")
+        # Push OK with the left mouse button
+        okWidget = self.cfg.btnBox.button(self.cfg.btnBox.Ok)
+        QTest.mouseClick(okWidget, Qt.LeftButton)
+        self.assertEqual(self.cfg.screen_width.text(), "1024")
+
+
+
 
    
 
