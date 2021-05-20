@@ -30,6 +30,8 @@ class testConfigWindow(unittest.TestCase):
     def setUp( self ):
         """Initialize"""
         self.cfg = ConfigWindow("ConfigWindow", "1.0")
+        # restore the toml file to default config
+        self.cfg.saveDefaultConfig()
         self.cfg.displayGlobalConfig()
 
         self.glob = {
@@ -84,11 +86,20 @@ class testConfigWindow(unittest.TestCase):
         ''' test input GUI '''
         # Clear and then type "1024" into the lineEdit widget
         self.cfg.screen_width.clear()
+        self.cfg.screen_height.clear()
+        self.cfg.bottom_depth.clear()
         QTest.keyClicks(self.cfg.screen_width, "1024")
+        QTest.keyClicks(self.cfg.screen_height, "768")
+        QTest.keyClicks(self.cfg.bottom_depth, "4500")
+        QTest.keyClick(self.cfg.reference, Qt.Key_Down)
         # Push OK with the left mouse button
         okWidget = self.cfg.btnBox.button(self.cfg.btnBox.Ok)
         QTest.mouseClick(okWidget, Qt.LeftButton)
         self.assertEqual(self.cfg.screen_width.text(), "1024")
+        self.assertEqual(self.cfg.screen_height.text(), "768")
+        self.assertEqual(self.cfg.bottom_depth.text(), "4500")
+        self.assertEqual(self.cfg.reference.currentText(), "bottom")
+
 
 
 
