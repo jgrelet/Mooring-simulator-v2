@@ -26,20 +26,21 @@ See: https://code.visualstudio.com/docs/python/testing
 app= QApplication( sys.argv )
 
 class testConfigWindow(unittest.TestCase):
+    """ Test the configuration form GUI """
 
     def setUp( self ):
-        """Initialize"""
-        self.cfg = ConfigWindow("ConfigWindow", "1.0")
+        """ Create and initialize to default the GUI"""
+        self.form = ConfigWindow("ConfigWindow", "1.0")
         # restore the toml file to default config
-        self.cfg.saveDefaultConfig()
-        self.cfg.displayGlobalConfig()
+        self.form.saveDefaultConfig()
+        self.form.displayGlobalConfig()
 
         self.glob = {
             'author': "jgrelet IRD March 2021",
             'debug': False,
             'echo': True,
-            'screen_width': 800,
-            'screen_height': 600
+            'screenWidth': 800,
+            'screenHeight': 600
         }
 
         self.tools = { 
@@ -48,59 +49,92 @@ class testConfigWindow(unittest.TestCase):
 
         self.config = {
             'reference': 'surface',  # or bottom
-            'bottom_depth': 0,
+            'bottomDepth': 0,
             'library': 'library/example.xls'
         }
 
-    def test_glob(self):
-        ''' test block ['global']'''
-        d = self.cfg['global']
+    def clearForm(self):
+        """" Clear all line edit field """
+        self.form.screenWidth.clear()
+        self.form.screenHeight.clear()
+        self.form.bottomDepth.clear()
+
+    def test_0_defaults(self):
+        ''' Test the GUI in its default state '''
+        #self.form.saveDefaultConfig()
+        #self.form.displayGlobalConfig()
+        self.assertEqual(int(self.form.screenWidth.text()), self.glob['screenWidth'])
+        self.assertEqual(int(self.form.screenHeight.text()), self.glob['screenHeight'])
+        self.assertEqual(self.form.reference.currentText(), self.config['reference'])
+        self.assertEqual(int(self.form.bottomDepth.text()), self.config['bottomDepth'])
+
+    def test_1_glob(self):
+        ''' test default config ['global']'''
+        d = self.form['global']
         for k in d.keys():
             self.assertEqual(d[k], self.glob[k])
 
-    def test_tools(self):
-        ''' test block ['tools']'''
-        d = self.cfg['tools']
+    def test_2_tools(self):
+        ''' test default config ['tools']'''
+        d = self.form['tools']
         for k in d.keys():
             self.assertEqual(d[k], self.tools[k])
 
-    def test_config(self):
-        ''' test block ['config']'''
-        d = self.cfg['config']
+    def test_3_config(self):
+        ''' test default config ['config']'''
+        d = self.form['config']
         for k in d.keys():
             self.assertEqual(d[k], self.config[k])
 
     # def test_false(self):
     #     ''' test block ['false']'''
-    #     d = self.cfg['false']
+    #     d = self.form['false']
     #     self.assertEqual(d, None)
 
-    def test_default_gui(self):
-        ''' test default GUI '''
-        self.assertEqual(int(self.cfg.screen_width.text()), self.glob['screen_width'])
-        self.assertEqual(int(self.cfg.screen_height.text()), self.glob['screen_height'])
-        self.assertEqual(self.cfg.reference.currentText(), self.config['reference'])
-        self.assertEqual(int(self.cfg.bottom_depth.text()), self.config['bottom_depth'])
+ 
 
-    def test_input_gui(self):
-        ''' test input GUI '''
+    def test_screenWithLineEdit(self):
+        ''' Test the screen width line edit '''
         # Clear and then type "1024" into the lineEdit widget
-        self.cfg.screen_width.clear()
-        self.cfg.screen_height.clear()
-        self.cfg.bottom_depth.clear()
-        QTest.keyClicks(self.cfg.screen_width, "1024")
-        QTest.keyClicks(self.cfg.screen_height, "768")
-        QTest.keyClicks(self.cfg.bottom_depth, "4500")
-        QTest.keyClick(self.cfg.reference, Qt.Key_Down)
+        #self.clearForm()
+        QTest.keyClicks(self.form.screenWidth, "1024")
         # Push OK with the left mouse button
-        okWidget = self.cfg.btnBox.button(self.cfg.btnBox.Ok)
+        okWidget = self.form.btnBox.button(self.form.btnBox.Ok)
         QTest.mouseClick(okWidget, Qt.LeftButton)
-        self.assertEqual(self.cfg.screen_width.text(), "1024")
-        self.assertEqual(self.cfg.screen_height.text(), "768")
-        self.assertEqual(self.cfg.bottom_depth.text(), "4500")
-        self.assertEqual(self.cfg.reference.currentText(), "bottom")
+        self.assertEqual(int(self.form.screenWidth.text()), 1024)
 
 
+    def test_screenHeightLineEdit(self):
+        ''' Test the screen height line edit '''
+        # Clear and then type "768" into the lineEdit widget
+        #self.clearForm()
+        QTest.keyClicks(self.form.screenHeight, "768")
+        # Push OK with the left mouse button
+        okWidget = self.form.btnBox.button(self.form.btnBox.Ok)
+        QTest.mouseClick(okWidget, Qt.LeftButton)
+        self.assertEqual(int(self.form.screenHeight.text()), 768)
+
+    def test_referenceLineEdit(self):
+        ''' Test the reference line edit '''
+        # select into the reference comboBox widget
+        #self.clearForm()
+        QTest.keyClick(self.form.reference, Qt.Key_Down)
+        self.assertEqual(self.form.reference.currentText(), "bottom")
+        QTest.keyClick(self.form.reference, Qt.Key_Down)
+        #self.assertEqual(self.form.reference.currentText(), "surface")
+        # Push OK with the left mouse button
+        okWidget = self.form.btnBox.button(self.form.btnBox.Ok)
+        QTest.mouseClick(okWidget, Qt.LeftButton)
+
+    def test_bottomDepthLineEdit(self):
+        ''' Test the bottom depth line edit '''
+        # Clear and then type "4500" into the lineEdit widget
+        #self.clearForm()
+        QTest.keyClicks(self.form.bottomDepth, "4500")
+        # Push OK with the left mouse button
+        okWidget = self.form.btnBox.button(self.form.btnBox.Ok)
+        QTest.mouseClick(okWidget, Qt.LeftButton)
+        self.assertEqual(int(self.form.bottomDepth.text()), 4500)
 
 
 

@@ -42,9 +42,9 @@ class ConfigWindow(QWidget):
             return self.__cfg[key]
 
     def __str__(self):
-        print(f"Window size = {self.__cfg['global']['screen_width']} x {self.__cfg['global']['screen_height']}")
+        print(f"Window size = {self.__cfg['global']['screenWidth']} x {self.__cfg['global']['screenHeight']}")
         print(f"Reference = {self.__cfg['config']['reference']}")
-        return(f"Bottom depth = {self.__cfg['config']['bottom_depth']}")
+        return(f"Bottom depth = {self.__cfg['config']['bottomDepth']}")
 
         
     def displayGlobalConfig(self):
@@ -53,21 +53,21 @@ class ConfigWindow(QWidget):
         self.setWindowTitle('Global configuration')
         dlgLayout = QVBoxLayout()
         formLayout = QFormLayout()
-        self.screen_width = QLineEdit(str(self.__cfg['global']['screen_width']))
-        self.screen_width.setInputMask("0000")
-        self.screen_height = QLineEdit(str(self.__cfg['global']['screen_height']))
-        self.screen_height.setInputMask("0000")
+        self.screenWidth = QLineEdit(str(self.__cfg['global']['screenWidth']))
+        self.screenWidth.setInputMask("0000")
+        self.screenHeight = QLineEdit(str(self.__cfg['global']['screenHeight']))
+        self.screenHeight.setInputMask("0000")
         self.reference = QComboBox()
         self.reference.addItems([ "surface","bottom"])
         index = self.reference.findText(self.__cfg['config']['reference'], Qt.MatchFixedString)
         if index >= 0:
              self.reference.setCurrentIndex(index)
-        self.bottom_depth = QLineEdit(str(self.__cfg['config']['bottom_depth']))
-        self.bottom_depth.setInputMask("0000")
-        formLayout.addRow("Screen width", self.screen_width)
-        formLayout.addRow("Screen height", self.screen_height)
+        self.bottomDepth = QLineEdit(str(self.__cfg['config']['bottomDepth']))
+        self.bottomDepth.setInputMask("0000")
+        formLayout.addRow("Screen width", self.screenWidth)
+        formLayout.addRow("Screen height", self.screenHeight)
         formLayout.addRow("Origin", self.reference)
-        formLayout.addRow("Bottom depth", self.bottom_depth)
+        formLayout.addRow("Bottom depth", self.bottomDepth)
         self.btnBox = QDialogButtonBox()
         self.btnBox.setStandardButtons(
             QDialogButtonBox.Ok | QDialogButtonBox.Cancel
@@ -83,10 +83,10 @@ class ConfigWindow(QWidget):
         #self.setCentralWidget(self.config)
 
     def accept(self):
-        self.__cfg['global']['screen_width'] = int(self.screen_width.text())
-        self.__cfg['global']['screen_height'] = int(self.screen_height.text())
+        self.__cfg['global']['screenWidth'] = int(self.screenWidth.text())
+        self.__cfg['global']['screenHeight'] = int(self.screenHeight.text())
         self.__cfg['config']['reference'] = str(self.reference.currentText())
-        self.__cfg['config']['bottom_depth'] = int(self.bottom_depth.text())
+        self.__cfg['config']['bottomDepth'] = int(self.bottomDepth.text())
         self.saveConfig()
         self.close()
         # prevent QWidget::setLayout: Attempting to set QLayout which already has a layout
@@ -116,15 +116,15 @@ class ConfigWindow(QWidget):
         author  = "jgrelet IRD March 2021"
         debug   = false
         echo    = true
-        screen_width = 800
-        screen_height = 600
+        screenWidth = 800
+        screenHeight = 600
 
         [tools]
         name = 'tools/Angulate.xls'
 
         [config]
         reference = 'surface'  # or bottom
-        bottom_depth = 0
+        bottomDepth = 0
         library = 'library/example.xls'
         """
         return toml.loads(toml_string)
@@ -139,7 +139,7 @@ if __name__ == "__main__":
     # remove path and file extention, get only the filename
     appName = Path(__file__).with_suffix('').stem
 
-    cfg = ConfigWindow(appName, "1.02")
+    cfg = ConfigWindow(appName, "1.03")
     cfg.displayGlobalConfig() 
     cfg.show()
 

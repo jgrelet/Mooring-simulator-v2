@@ -45,7 +45,7 @@ import qrc_resources
 from libraryWidget import LibraryWidget
 from configWindow import ConfigWindow
 
-VERSION = "1.2.1.0"
+VERSION = "1.2.1.1"
 
 
 class MainWindow(QMainWindow, QObject):
@@ -67,7 +67,7 @@ class MainWindow(QMainWindow, QObject):
         self.setWindowTitle("Mooring simulator v2.0")
         appName = Path(__file__).with_suffix('').stem
         self.cfg = ConfigWindow(appName, VERSION)
-        self.resize(self.cfg['global']['screen_width'], self.cfg['global']['screen_height'])
+        self.resize(self.cfg['global']['screenWidth'], self.cfg['global']['screenHeight'])
         self.fileName = file_name
         self.libraryFileName = library_file_name
 
@@ -422,7 +422,7 @@ class MainWindow(QMainWindow, QObject):
     def loadLibrary(self):
         self.editToolBar.setDisabled(False)
         self.library = LibraryWidget(self.libraryFileName)
-        self.library.setMinimumWidth(floor(self.screen_width/2))
+        self.library.setMinimumWidth(floor(self.cfg['global']['screenWidth']/2))
         self.library.setMinimumHeight(200)
         self.libraryDockWidget = QDockWidget()
         self.libraryDockWidget.setWidget(self.library)
@@ -455,21 +455,6 @@ class MainWindow(QMainWindow, QObject):
 
         self.cfg.displayGlobalConfig() 
         self.cfg.show()
-
-    def selectScreenWidth(self, width):
-        print(f"New width: {width.text()}")
-        self.cfg['global']['screen_width'] = width.text()
-
-    def selectOrigin(self, comboBox):
-        print(f"Origin Selected: {comboBox.currentText()}")
-        self.cfg['config']['origin'] = comboBox.currentText()
-
-    def acceptConfig(self):
-        print(
-            f"{self.cfg['global']['screen_width']} x {self.cfg['global']['screen_height']}")
-
-    def cancelConfig(self):
-        print("Configuration cancelled...")
 
     def setenvConfiguration(self):
         # Logic for pasting content goes here...
@@ -539,26 +524,6 @@ def processArgs():
     return parser
 
 
-def getDefaultConfig():
-    toml_string = """
-
-    [global]
-    author  = "jgrelet IRD March 2021"
-    debug   = false
-    echo    = true
-    screen_width = 800
-    screen_height = 600
-
-    [tools]
-    name = 'tools/Angulate.xls'
-
-    [config]
-    origin = 'surface'  # or bottom
-    bottom_depth = 0
-    library = 'library/example.xls'
-    """
-    return toml.loads(toml_string)
-
 # main function
 if __name__ == "__main__":
     ''' Mooring simulator program entry point'''
@@ -598,10 +563,10 @@ if __name__ == "__main__":
     # Set application window size, 800 x 600 by default
     if len(args.size) == 1:
         screen_resolution = app.desktop().screenGeometry()
-        mainWindow.cfg['global']['screen_width'], mainWindow.cfg['global']['screen_height'] = \
+        mainWindow.cfg['global']['screenWidth'], mainWindow.cfg['global']['screenHeight'] = \
             screen_resolution.width(), screen_resolution.height()
     elif len(args.size) == 2:
-        mainWindow.cfg['global']['screen_width'], mainWindow.cfg['global']['screen_height'] = \
+        mainWindow.cfg['global']['screenWidth'], mainWindow.cfg['global']['screenHeight'] = \
             args.size[0], args.size[1]
     else:
         pass
@@ -614,8 +579,8 @@ if __name__ == "__main__":
     ret = app.exec_()
 
     # GetmainWindow. the main windows size and update configuration for next use
-    #mainWindow.cfg['global']['screen_width'] = mainWindow.frameGeometry().width()
-    #mainWindow.cfg['global']['screen_height'] = mainWindow.frameGeometry().height()
+    #mainWindow.cfg['global']['screenWidth'] = mainWindow.frameGeometry().width()
+    #mainWindow.cfg['global']['screenHeight'] = mainWindow.frameGeometry().height()
 
     # Debug config
     debug = mainWindow.cfg['global']['debug']
