@@ -40,14 +40,20 @@ def processArgs():
                         action='store_true')
     return parser
 
-def startLogging(appName):
+def startLogging(appName, debug=False):
         # log to file
+        formatter = logging.Formatter('%(asctime)s %(levelname)s %(module)s %(funcName)s %(message)s')
         fh = logging.FileHandler(Path(appName).with_suffix('.log'))
         fh.setLevel(logging.DEBUG|logging.ERROR|logging.INFO)
-        fh.setFormatter(
-            logging.Formatter(
-                '%(asctime)s %(levelname)s %(module)s %(funcName)s %(message)s'))
+        fh.setFormatter(formatter)
         logging.getLogger().addHandler(fh)
+        
+        # add handlers to logger.
+        if debug:
+            ch = logging.StreamHandler()
+            ch.setLevel(level=logging.DEBUG)
+            ch.setFormatter(formatter)
+            logging.getLogger().addHandler(ch)
 
 # main function
 if __name__ == "__main__":
@@ -58,15 +64,16 @@ if __name__ == "__main__":
 
     appName = Path(__file__).with_suffix('').stem
     
+    # Recover and process optionnal line arguments
+    parser = processArgs()
+    args = parser.parse_args()
+
     # start logging
-    startLogging(appName)
+    startLogging(appName, args.debug)
 
     # Create and show the main application window
     mainAppWindow = MainAppWindow(appName, VERSION)
 
-    # Recover and process optionnal line arguments
-    parser = processArgs()
-    args = parser.parse_args()
     # load command line given library
     if args.lib is None:
         mainAppWindow.library = path.normpath(
