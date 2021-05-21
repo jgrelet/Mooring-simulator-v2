@@ -59,10 +59,9 @@ class testConfigWindow(unittest.TestCase):
         self.form.screenHeight.clear()
         self.form.bottomDepth.clear()
 
+    
     def test_0_defaults(self):
         ''' Test the GUI in its default state '''
-        #self.form.saveDefaultConfig()
-        #self.form.displayGlobalConfig()
         self.assertEqual(int(self.form.screenWidth.text()), self.glob['screenWidth'])
         self.assertEqual(int(self.form.screenHeight.text()), self.glob['screenHeight'])
         self.assertEqual(self.form.reference.currentText(), self.config['reference'])
