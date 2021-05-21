@@ -105,9 +105,9 @@ class ConfigWindow(QWidget):
     def saveDefaultConfig(self):
         print(f"Configuration file don't exist, create one from default config to {self.configFile}")
         with open(self.configFile, 'w') as fid:
-            cfg = ConfigWindow.getDefaultConfig()
-            cfg['version'] = self.version
-            toml.dump(cfg, fid)
+            self.__cfg = ConfigWindow.getDefaultConfig()
+            self.__cfg['version'] = self.version
+            toml.dump(self.__cfg, fid)
 
     @staticmethod
     def getDefaultConfig():
