@@ -51,7 +51,8 @@ class MainAppWindow(QMainWindow, QObject):
         super(MainAppWindow, self).__init__()
         self.setWindowTitle(f"Mooring simulator v{version}")
         
-        self.cfg = ConfigWindow(appName, version)
+        # we use same name pour directory and toml configuration file
+        self.cfg = ConfigWindow(appName, appName, version)
         self.resize(self.cfg['global']['screenWidth'], self.cfg['global']['screenHeight'])
         self.fileName = file_name
         self.libraryFileName = library_file_name
@@ -422,7 +423,6 @@ class MainAppWindow(QMainWindow, QObject):
         """ insert doc here"""
         if self.editToolBar.isEnabled():
             self.library.read()
-            print("je passe")
             self.library.libraryLayout.removeWidget(self.library.libraryArea)
             self.library.libraryArea.close()
             self.library.display()

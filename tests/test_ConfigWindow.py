@@ -30,7 +30,7 @@ class testConfigWindow(unittest.TestCase):
 
     def setUp( self ):
         """ Create and initialize to default the GUI"""
-        self.form = ConfigWindow("ConfigWindow", "1.0")
+        self.form = ConfigWindow("MooringSimulator", "ConfigWindow", "1.0")
         # restore the toml file to default config
         self.form.saveDefaultConfig()
         self.form.displayGlobalConfig()
@@ -59,7 +59,7 @@ class testConfigWindow(unittest.TestCase):
         self.form.screenHeight.clear()
         self.form.bottomDepth.clear()
 
-    
+
     def test_0_defaults(self):
         ''' Test the GUI in its default state '''
         self.assertEqual(int(self.form.screenWidth.text()), self.glob['screenWidth'])

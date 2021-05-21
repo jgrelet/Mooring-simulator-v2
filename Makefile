@@ -36,6 +36,9 @@ build:
 run:
 	$(PYTHON) $(MAIN)
 	
+debug:
+	$(PYTHON) $(MAIN) -d
+	
 lib: 
 	$(PYTHON) $(MAIN) --lib library\test.xls
 	

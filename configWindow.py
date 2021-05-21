@@ -3,24 +3,28 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QSize, Qt, QObjectCleanupHandler #, QObject, pyqtSignal
 from functools import partial
-from os import startfile, path
+from os import path, makedirs
 from pathlib import Path
 import toml
+import logging
 
 
 class ConfigWindow(QWidget):
     ''' This class display configuration window, and save in toml file
     '''
-    def __init__(self, appName, version):
+    def __init__(self, pathName, appName, version):
         super(QWidget, self).__init__()
 
         self.version = version
          # setup toml configuration file, may be move in init function.
-        self.configFile = Path(path.expandvars('$APPDATA/' + appName)).with_suffix('.toml')
+        self.configPath = path.expandvars(f"$APPDATA/{pathName}")
+        if not path.exists(self.configPath):
+            makedirs(self.configPath)
+        self.configFile = Path(path.expandvars(f"{self.configPath}/{appName}")).with_suffix('.toml')
         if not path.isfile(self.configFile):
             self.saveDefaultConfig()
         self.__cfg = toml.load(self.configFile)
-        if not "version" in self.__cfg or self.__cfg["version"] != version:
+        if not "version" in self.__cfg or self.__cfg["version"] != self.version:
             self.saveDefaultConfig()
             self.__cfg = toml.load(self.configFile)
 
@@ -35,17 +39,16 @@ class ConfigWindow(QWidget):
     def __getitem__(self, key):
         ''' overload r[key] '''
         if key not in self.__cfg:
-            #logging.error(
-            print(" file_extractor.py: invalid key: \"{}\"".format(key))
+            logging.error(" file_extractor.py: invalid key: \"{}\"".format(key))
             return None
         else:
             return self.__cfg[key]
 
     def __str__(self):
-        print(f"Window size = {self.__cfg['global']['screenWidth']} x {self.__cfg['global']['screenHeight']}")
-        print(f"Reference = {self.__cfg['config']['reference']}")
-        return(f"Bottom depth = {self.__cfg['config']['bottomDepth']}")
-
+        logging.debug(f"Window size = {self.__cfg['global']['screenWidth']} x {self.__cfg['global']['screenHeight']}")
+        logging.debug(f"Reference = {self.__cfg['config']['reference']}")
+        logging.debug(f"Bottom depth = {self.__cfg['config']['bottomDepth']}")
+        return 'Je passe'
         
     def displayGlobalConfig(self):
         """ Build and display the configuration panel
@@ -94,7 +97,7 @@ class ConfigWindow(QWidget):
         QObjectCleanupHandler().add(self.layout())
 
     def cancel(self):
-        #print("Configuration cancelled...")
+        logging.debug("Configuration cancelled...")
         self.close()
     
     # Save current config
@@ -103,7 +106,7 @@ class ConfigWindow(QWidget):
             toml.dump(self.__cfg, fid)
 
     def saveDefaultConfig(self):
-        print(f"Configuration file don't exist, create one from default config to {self.configFile}")
+        logging.info(f"Configuration file don't exist, create one from default config to {self.configFile}")
         with open(self.configFile, 'w') as fid:
             self.__cfg = ConfigWindow.getDefaultConfig()
             self.__cfg['version'] = self.version
@@ -145,5 +148,5 @@ if __name__ == "__main__":
 
     # Run the event loop
     app.exec_()
-    print(cfg)
+    logging.debug(cfg)
 

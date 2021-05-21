@@ -40,6 +40,14 @@ def processArgs():
                         action='store_true')
     return parser
 
+def startLogging(appName):
+        # log to file
+        fh = logging.FileHandler(Path(appName).with_suffix('.log'))
+        fh.setLevel(logging.DEBUG|logging.ERROR|logging.INFO)
+        fh.setFormatter(
+            logging.Formatter(
+                '%(asctime)s %(levelname)s %(module)s %(funcName)s %(message)s'))
+        logging.getLogger().addHandler(fh)
 
 # main function
 if __name__ == "__main__":
@@ -49,6 +57,9 @@ if __name__ == "__main__":
     app = QApplication([])
 
     appName = Path(__file__).with_suffix('').stem
+    
+    # start logging
+    startLogging(appName)
 
     # Create and show the main application window
     mainAppWindow = MainAppWindow(appName, VERSION)
@@ -108,7 +119,7 @@ if __name__ == "__main__":
 
     # Save current config
     mainAppWindow.cfg.saveConfig()
-    print(mainAppWindow.cfg)
+    logging.debug(mainAppWindow.cfg)
 
     # Exit
     sys.exit(ret)
