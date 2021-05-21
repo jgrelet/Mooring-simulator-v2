@@ -13,9 +13,12 @@ from os import path
 from pathlib import Path
 import argparse
 import logging
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QApplication
 from mainAppWindow import MainAppWindow
+
+VERSION = "2.0.testing.0.1"
+
 
 def processArgs():
     parser = argparse.ArgumentParser(
@@ -42,24 +45,27 @@ def processArgs():
 if __name__ == "__main__":
     ''' Mooring simulator program entry point'''
 
-    # Create the application
+    # Create the application handler
     app = QApplication([])
 
-    # Create and show the main window
-    mainWindow = MainAppWindow()
+    appName = Path(__file__).with_suffix('').stem
+
+    # Create and show the main application window
+    mainAppWindow = MainAppWindow(appName, VERSION)
 
     # Recover and process optionnal line arguments
     parser = processArgs()
     args = parser.parse_args()
     # load command line given library
     if args.lib is None:
-        mainWindow.library = path.normpath(mainWindow.cfg['config']['library'])
+        mainAppWindow.library = path.normpath(
+            mainAppWindow.cfg['config']['library'])
     else:
-        mainWindow.library = args.lib
+        mainAppWindow.library = args.lib
 
     # reset config file
     if args.reset:
-        mainWindow.saveDefaultConfig()
+        mainAppWindow.cfg.saveDefaultConfig()
         #cfg = toml.load(theConfig)
 
     # Create and show splash screen
@@ -77,32 +83,32 @@ if __name__ == "__main__":
     # Set application window size, 800 x 600 by default
     if len(args.size) == 1:
         screen_resolution = app.desktop().screenGeometry()
-        mainWindow.cfg['global']['screenWidth'], mainWindow.cfg['global']['screenHeight'] = \
+        mainAppWindow.cfg['global']['screenWidth'], mainAppWindow.cfg['global']['screenHeight'] = \
             screen_resolution.width(), screen_resolution.height()
     elif len(args.size) == 2:
-        mainWindow.cfg['global']['screenWidth'], mainWindow.cfg['global']['screenHeight'] = \
+        mainAppWindow.cfg['global']['screenWidth'], mainAppWindow.cfg['global']['screenHeight'] = \
             args.size[0], args.size[1]
     else:
         pass
 
-    mainWindow.show()
+    mainAppWindow.show()
     # Close the splash screen
-    # splash.finish(mainWindow)
+    # splash.finish(mainAppWindow)
 
     # Run the event loop
     ret = app.exec_()
 
     # GetmainWindow. the main windows size and update configuration for next use
-    #mainWindow.cfg['global']['screenWidth'] = mainWindow.frameGeometry().width()
-    #mainWindow.cfg['global']['screenHeight'] = mainWindow.frameGeometry().height()
+    #mainAppWindow.cfg['global']['screenWidth'] = mainAppWindow.frameGeometry().width()
+    #mainAppWindow.cfg['global']['screenHeight'] = mainAppWindow.frameGeometry().height()
 
     # Debug config
-    debug = mainWindow.cfg['global']['debug']
-    mainWindow.cfg['global']['debug'] = not debug
+    debug = mainAppWindow.cfg['global']['debug']
+    mainAppWindow.cfg['global']['debug'] = not debug
 
     # Save current config
-    mainWindow.cfg.saveConfig()
-    print(mainWindow.cfg)
+    mainAppWindow.cfg.saveConfig()
+    print(mainAppWindow.cfg)
 
     # Exit
     sys.exit(ret)

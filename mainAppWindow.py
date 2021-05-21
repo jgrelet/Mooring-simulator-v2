@@ -28,14 +28,9 @@ from PyQt5.QtWidgets import (
     QStyle,
     QFileDialog,
     QDockWidget,
-    QSplashScreen,
 )
-import qrc_resources
 from libraryWidget import LibraryWidget
 from configWindow import ConfigWindow
-
-VERSION = "1.2.1.1"
-
 
 class MainAppWindow(QMainWindow, QObject):
     """Main window of the Mooring Simulator application
@@ -44,18 +39,19 @@ class MainAppWindow(QMainWindow, QObject):
     menus, status bar, dockable widgets and more
     """
 
-    # defined a signal named trigger as class attribute
+    # defined a signal named trigger as class attribute, used to display info on status bar
+    # experimental...
     trigger = pyqtSignal()
 
-    def __init__(self, library_file_name='', file_name=''):
+    def __init__(self, appName, version, library_file_name='', file_name=''):
         """In the class initializer .__init__(), you first call the parent class
         QMainWindow initializer using super(). Then you set the title of the window 
         using .setWindowTitle() and resize the window using .resize()
         """
         super(MainAppWindow, self).__init__()
-        self.setWindowTitle("Mooring simulator v2.0")
-        appName = Path(__file__).with_suffix('').stem
-        self.cfg = ConfigWindow(appName, VERSION)
+        self.setWindowTitle(f"Mooring simulator v{version}")
+        
+        self.cfg = ConfigWindow(appName, version)
         self.resize(self.cfg['global']['screenWidth'], self.cfg['global']['screenHeight'])
         self.fileName = file_name
         self.libraryFileName = library_file_name
