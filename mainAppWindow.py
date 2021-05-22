@@ -31,6 +31,7 @@ from PyQt5.QtWidgets import (
 )
 from libraryWidget import LibraryWidget
 from configWindow import ConfigWindow
+import qrc_resources
 
 class MainAppWindow(QMainWindow, QObject):
     """Main window of the Mooring Simulator application
