@@ -39,16 +39,16 @@ class ConfigWindow(QWidget):
     def __getitem__(self, key):
         ''' overload r[key] '''
         if key not in self.__cfg:
-            logging.error(" file_extractor.py: invalid key: \"{}\"".format(key))
+            logging.error("invalid key: \"{}\"".format(key))
             return None
         else:
             return self.__cfg[key]
 
     def __str__(self):
-        logging.debug(f"Window size = {self.__cfg['global']['screenWidth']} x {self.__cfg['global']['screenHeight']}")
-        logging.debug(f"Reference = {self.__cfg['config']['reference']}")
-        logging.debug(f"Bottom depth = {self.__cfg['config']['bottomDepth']}")
-        return 'Je passe'
+        print(f"Window size = {self.__cfg['global']['screenWidth']} x {self.__cfg['global']['screenHeight']}")
+        print(f"Reference = {self.__cfg['config']['reference']}")
+        print(f"Bottom depth = {self.__cfg['config']['bottomDepth']}")
+        return ''
         
     def displayGlobalConfig(self):
         """ Build and display the configuration panel
@@ -142,11 +142,11 @@ if __name__ == "__main__":
     # remove path and file extention, get only the filename
     appName = Path(__file__).with_suffix('').stem
 
-    cfg = ConfigWindow(appName, "1.03")
+    cfg = ConfigWindow(appName, appName, "1.03")
     cfg.displayGlobalConfig() 
     cfg.show()
 
     # Run the event loop
     app.exec_()
-    logging.debug(cfg)
+    print(cfg)
 

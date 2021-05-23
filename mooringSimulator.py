@@ -41,20 +41,25 @@ def processArgs():
     return parser
 
 def startLogging(appName, debug=False):
-        # log to file
+        # create logger
+        logger = logging.getLogger('simple_example')
+        logger.setLevel(logging.DEBUG)
+        # create formatter
         formatter = logging.Formatter('%(asctime)s %(levelname)s %(module)s %(funcName)s %(message)s')
-        fh = logging.FileHandler(Path(appName).with_suffix('.log'))
-        fh.setLevel(logging.DEBUG|logging.ERROR|logging.INFO)
-        fh.setFormatter(formatter)
-        logging.getLogger().addHandler(fh)
-        
-        # add handlers to logger.
+        # create console handler and set level to debug
+        fh = logging.StreamHandler()
+        fh.setLevel(logging.DEBUG)
         if debug:
-            ch = logging.StreamHandler()
-            ch.setLevel(level=logging.DEBUG)
-            ch.setFormatter(formatter)
-            logging.getLogger().addHandler(ch)
-
+            fh = logging.StreamHandler()
+        else:
+            fh = logging.FileHandler(Path(appName).with_suffix('.log'))
+        # add formatter to fh
+        fh.setFormatter(formatter)
+        # add fh to logger
+        logger.addHandler(fh)
+        # logging.basicConfig(
+        #     format='%(levelname)s:%(message)s', level=logging.DEBUG)
+        
 # main function
 if __name__ == "__main__":
     ''' Mooring simulator program entry point'''
@@ -126,7 +131,7 @@ if __name__ == "__main__":
 
     # Save current config
     mainAppWindow.cfg.saveConfig()
-    logging.debug(mainAppWindow.cfg)
+    logging.debug(print(mainAppWindow.cfg))
 
     # Exit
     sys.exit(ret)

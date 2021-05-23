@@ -20,6 +20,24 @@ or
 or configure testing with VSC. 
 To enable testing, use the Python: Configure Tests command on the Command Palette.
 See: https://code.visualstudio.com/docs/python/testing
+The TestCase class provides several assert methods to check for and report failures. 
+The following table lists the most commonly used methods (see the tables below 
+for more assert methods):
+
+Method                      Checks that
+----------------------------------------
+assertEqual(a, b)           a == b
+assertNotEqual(a, b)        a != b
+assertTrue(x)               bool(x) is True
+assertFalse(x)              bool(x) is False
+assertIs(a, b)              a is b
+assertIsNot(a, b)           a is not b
+assertIsNone(x)             x is None
+assertIsNotNone(x)          x is not None
+assertIn(a, b)              a in b
+assertNotIn(a, b)           a not in b
+assertIsInstance(a, b)      isinstance(a, b)
+assertNotIsInstance(a, b)   not isinstance(a, b)
 '''
 
 # Create an application global accessible from all tests.
@@ -84,6 +102,10 @@ class testConfigWindow(unittest.TestCase):
         d = self.form['config']
         for k in d.keys():
             self.assertEqual(d[k], self.config[k])
+
+    def test_4_config(self):
+        ''' test default invalid config key'''
+        self.assertIsNone(self.form['unknow'])
 
     # def test_false(self):
     #     ''' test block ['false']'''
