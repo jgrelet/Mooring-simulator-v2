@@ -42,23 +42,23 @@ def processArgs():
 
 def startLogging(appName, debug=False):
         # create logger
-        logger = logging.getLogger('simple_example')
-        logger.setLevel(logging.DEBUG)
-        # create formatter
-        formatter = logging.Formatter('%(asctime)s %(levelname)s %(module)s %(funcName)s %(message)s')
-        # create console handler and set level to debug
-        fh = logging.StreamHandler()
-        fh.setLevel(logging.DEBUG)
+        # logger = logging.getLogger('simple_example')
+        # logger.setLevel(logging.DEBUG)
+        # # create formatter
+        # formatter = logging.Formatter('%(asctime)s %(levelname)s %(module)s %(funcName)s %(message)s')
+        # # create console handler and set level to debug
+        # fh = logging.StreamHandler()
+        # fh.setLevel(logging.DEBUG)
         if debug:
-            fh = logging.StreamHandler()
-        else:
-            fh = logging.FileHandler(Path(appName).with_suffix('.log'))
-        # add formatter to fh
-        fh.setFormatter(formatter)
-        # add fh to logger
-        logger.addHandler(fh)
-        # logging.basicConfig(
-        #     format='%(levelname)s:%(message)s', level=logging.DEBUG)
+            logging.basicConfig(
+            format='%(levelname)s:%(module)s %(funcName)s %(message)s', level=logging.DEBUG)
+        #     fh = logging.StreamHandler()
+        # else:
+        #     fh = logging.FileHandler(Path(appName).with_suffix('.log'))
+        # # add formatter to fh
+        # fh.setFormatter(formatter)
+        # # add fh to logger
+        # logger.addHandler(fh)
         
 # main function
 if __name__ == "__main__":

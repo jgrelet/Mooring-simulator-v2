@@ -79,7 +79,7 @@ class LibraryWidget(QWidget):
                 # display column value
                 columns = list(library[worksheet][row].keys())
                 for col, name in enumerate(columns):
-                    logging.debug(f"col: {col}, {type(col)},name: {name}, {type(name)}")
+                    #logging.debug(f"col: {col}, {type(col)},name: {name}, {type(name)}")
                     label = QLabel(str(library[worksheet][row][name]))
                     color = 'black' if col else 'red' 
                     if not ind_row: color = 'green' 
