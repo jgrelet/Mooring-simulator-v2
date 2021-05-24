@@ -1,4 +1,4 @@
-PROJECT = MooringSimulator
+PROJECT = mooringSimulator
 MAIN = ${PROJECT}.py
 PYTHON = python
 PYLINT = pylint
