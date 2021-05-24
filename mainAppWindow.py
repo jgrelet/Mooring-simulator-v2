@@ -8,12 +8,10 @@
 
 """Mooring simulator PyQt application."""
 
-import sys
+import os, sys, subprocess
 from functools import partial
 from math import floor
-from os import startfile, path
 from pathlib import Path
-import argparse
 import logging
 
 from PyQt5.QtCore import Qt, QObject, pyqtSignal
@@ -433,9 +431,12 @@ class MainAppWindow(QMainWindow, QObject):
             self.library.display()
 
     def openExcelLibrary(self):
-        # Logic for pasting content goes here...
-        #self.centralWidget.setText("<b> Library > openExcel </b> clicked")
-        startfile(self.libraryFileName)
+        print(sys.platform)
+        if sys.platform == "win32":
+            os.startfile(self.libraryFileName)
+        else:
+            opener = "open" if sys.platform == "darwin" else "xdg-open"
+            subprocess.call([opener, self.libraryFileName])
 
     def globalConfiguration(self):
 
