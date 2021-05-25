@@ -46,7 +46,7 @@ class LibraryWidget(QWidget):
         #sheet_names = library.worksheets
 
     def read(self):
-        ''' read and convert Excel file to JSON to python dict'''
+        ''' read and convert Excel file to JSON python dict'''
         return excel2json(self.fileName)
 
     
