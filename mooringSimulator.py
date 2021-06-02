@@ -17,7 +17,17 @@ from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QApplication
 from mainAppWindow import MainAppWindow
 
-VERSION = "2.0.testing.0.1"
+from constants import VERSION
+
+class MooringSimulator():
+
+    def __init__(self, args):
+        super(MooringSimulator, self).__init__()
+        self.args = args
+        print(VERSION)
+        print(f"Args: {self.args}")
+        sys.exit
+
 
 
 def processArgs():
@@ -95,13 +105,13 @@ if __name__ == "__main__":
     # pixmap = QPixmap(":splash.png")
     # splash = QSplashScreen(pixmap)
     # splash.show()
-    app.processEvents()
+    # app.processEvents()
 
-    # print(QStyleFactory.keys())
-    app.setStyle("Fusion")
+    # # print(QStyleFactory.keys())
+    # app.setStyle("Fusion")
 
-    # Setting the Application Icon on Windows
-    app.setWindowIcon(QIcon(":windows-main.ico"))
+    # # Setting the Application Icon on Windows
+    # app.setWindowIcon(QIcon(":windows-main.ico"))
 
     # Set application window size, 800 x 600 by default
     if len(args.size) == 1:
