@@ -7,6 +7,7 @@ from os import path, makedirs
 from pathlib import Path
 import toml
 import logging
+from constants import DEFAULT_SCREEN_WIDTH
 
 
 class ConfigWindow(QWidget):
