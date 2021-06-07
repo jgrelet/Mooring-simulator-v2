@@ -46,16 +46,16 @@ class MainAppWindow(QMainWindow, QObject):
     # experimental...
     trigger = pyqtSignal()
 
-    def __init__(self, appName, library_file_name='', file_name=''):
+    def __init__(self, library_file_name='', file_name=''):
         """In the class initializer .__init__(), you first call the parent class
         QMainWindow initializer using super(). Then you set the title of the window 
         using .setWindowTitle() and resize the window using .resize()
         """
         super(MainAppWindow, self).__init__()
-        self.setWindowTitle(f"Mooring simulator v{VERSION}")
+        self.setWindowTitle(f"{NAME} v{VERSION}")
 
-        # we use same name pour directory and toml configuration file
-        self.cfg = ConfigWindow(appName, appName, VERSION)
+        # we use same name for directory and toml configuration file
+        self.cfg = ConfigWindow(NAME, NAME, VERSION)
         self.resize(self.cfg['global']['screenWidth'],
                     self.cfg['global']['screenHeight'])
         self.fileName = file_name
@@ -66,7 +66,7 @@ class MainAppWindow(QMainWindow, QObject):
         # at the center of the window. To do this, you call .setAlignment() on the
         # QLabel object with a couple of alignment flags.
         self.centralWidget = QLabel(
-            "Hello, welcome inside Mooring simulator, enjoy!")
+            f"Hello, welcome inside {NAME}, enjoy!")
         self.centralWidget.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         self.setCentralWidget(self.centralWidget)
 
