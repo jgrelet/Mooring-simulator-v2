@@ -8,14 +8,16 @@
 
 """Mooring simulator PyQt application."""
 
-import os, sys, subprocess
+import os
+import sys
+import subprocess
 from functools import partial
 from math import floor
 from pathlib import Path
 import logging
 
 from PyQt5.QtCore import Qt, QObject, pyqtSignal
-from PyQt5.QtGui import QIcon, QKeySequence 
+from PyQt5.QtGui import QIcon, QKeySequence
 from PyQt5.QtWidgets import (
     QAction,
     QApplication,
@@ -29,7 +31,9 @@ from PyQt5.QtWidgets import (
 )
 from libraryWidget import LibraryWidget
 from configWindow import ConfigWindow
+from version import NAME, VERSION
 import qrc_resources
+
 
 class MainAppWindow(QMainWindow, QObject):
     """Main window of the Mooring Simulator application
@@ -42,17 +46,18 @@ class MainAppWindow(QMainWindow, QObject):
     # experimental...
     trigger = pyqtSignal()
 
-    def __init__(self, appName, version, library_file_name='', file_name=''):
+    def __init__(self, appName, library_file_name='', file_name=''):
         """In the class initializer .__init__(), you first call the parent class
         QMainWindow initializer using super(). Then you set the title of the window 
         using .setWindowTitle() and resize the window using .resize()
         """
         super(MainAppWindow, self).__init__()
-        self.setWindowTitle(f"Mooring simulator v{version}")
-        
+        self.setWindowTitle(f"Mooring simulator v{VERSION}")
+
         # we use same name pour directory and toml configuration file
-        self.cfg = ConfigWindow(appName, appName, version)
-        self.resize(self.cfg['global']['screenWidth'], self.cfg['global']['screenHeight'])
+        self.cfg = ConfigWindow(appName, appName, VERSION)
+        self.resize(self.cfg['global']['screenWidth'],
+                    self.cfg['global']['screenHeight'])
         self.fileName = file_name
         self.libraryFileName = library_file_name
 
@@ -407,13 +412,14 @@ class MainAppWindow(QMainWindow, QObject):
     def loadLibrary(self):
         self.editToolBar.setDisabled(False)
         self.library = LibraryWidget(self.libraryFileName)
-        self.library.setMinimumWidth(floor(self.cfg['global']['screenWidth']/2))
+        self.library.setMinimumWidth(
+            floor(self.cfg['global']['screenWidth']/2))
         self.library.setMinimumHeight(200)
         self.libraryDockWidget = QDockWidget()
         self.libraryDockWidget.setWidget(self.library)
         #Ajoute la bibliotheque dans le DockWidget en position haute#
         self.addDockWidget(Qt.TopDockWidgetArea,
-                           self.libraryDockWidget)
+                        self.libraryDockWidget)
         self.libraryDockWidget.setWindowTitle('Library')
         # send a signal to statusbar for testing only
         self.trigger.emit()
@@ -440,7 +446,7 @@ class MainAppWindow(QMainWindow, QObject):
 
     def globalConfiguration(self):
 
-        self.cfg.displayGlobalConfig() 
+        self.cfg.displayGlobalConfig()
         self.cfg.show()
 
     def setenvConfiguration(self):
@@ -463,7 +469,7 @@ class MainAppWindow(QMainWindow, QObject):
 
     def about(self):
         # Logic for showing an about dialog content goes here...
-        self.centralWidget.setText("<b>Help > About...</b> clicked")
+        self.centralWidget.setText(f"<b>{NAME}:</b> {VERSION}")
 
     def populateOpenRecent(self):
         # Step 1. Remove the old options from the menu
@@ -488,7 +494,3 @@ class MainAppWindow(QMainWindow, QObject):
 
     def handle_trigger(self):
         self.wcLabel.setText(f"{self.getWordCount()} Words")
-
-
-
-

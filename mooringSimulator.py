@@ -17,8 +17,6 @@ from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QApplication
 from mainAppWindow import MainAppWindow
 
-VERSION = "2.0.testing.0.1"
-
 
 def processArgs():
     parser = argparse.ArgumentParser(
@@ -77,7 +75,7 @@ if __name__ == "__main__":
     startLogging(appName, args.debug)
 
     # Create and show the main application window
-    mainAppWindow = MainAppWindow(appName, VERSION)
+    mainAppWindow = MainAppWindow(appName)
 
     # load command line given library
     if args.lib is None:
