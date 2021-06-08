@@ -4,15 +4,21 @@ See the [roadmap](https://github.com/users/jgrelet/projects/1).
 
 A redesign of the GUI Mooring Simulator application based on [python-menus-toolbar](https://realpython.com/python-menus-toolbars/) that shows how to create and use menus, toolbars, and status bars using Python and PyQt.
 
-## How to Run this Application
+## Prerequisites
 
-To run this application, you need to [install `PyQt5`](https://realpython.com/python-pyqt-gui-calculator/#installing-pyqt) on your Python environment. To do that, you can run the following commands in a terminal or command prompt:
+We will use VSC as a development tool with conda and python 3.8
 
 ```sh
-pip3 install PyQt5 qt5-applications qt5-tools xlrd
+conda create -n ms2 python=3.8
+conda activate ms2
+conda install toml
+pip install PyQt5 qt5-applications qt5-tools xlrd
+
 ```
 
-Once you have [PyQt](https://www.riverbankcomputing.com/static/Docs/PyQt5/) installed, you can run the application by executing the following command:
+## How to Run this Application
+
+To run this application by executing the following command:
 
 ```sh
 python Mooring-simulator.py
