@@ -10,6 +10,7 @@
 
 #import sys
 #from functools import partial
+import logging
 
 #from PyQt5.QtCore import Qt, QObject, pyqtSignal
 from PyQt5.QtGui import QIcon  # , QKeySequence
@@ -23,7 +24,7 @@ from PyQt5.QtWidgets import (
     QGridLayout,
 )
 from excel2json import excel2json
-import logging
+from constants import STYLE_SPREADSHEET_TEXT
 
 
 class LibraryWidget(QWidget):
@@ -70,8 +71,7 @@ class LibraryWidget(QWidget):
             names = list(library[worksheet]['1'].keys())
             for col, name in enumerate(names):
                 label = QLabel(name)
-                label.setStyleSheet(
-                    "QLabel { font: bold; background-color : white; color : black;border: 2px solid black }")
+                label.setStyleSheet(STYLE_SPREADSHEET_TEXT)
                 grid.addWidget(label, 0, col)
             # for each row
             rows = list(library[worksheet].keys())

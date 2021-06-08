@@ -75,7 +75,7 @@ if __name__ == "__main__":
     startLogging(appName, args.debug)
 
     # Create and show the main application window
-    mainAppWindow = MainAppWindow(appName)
+    mainAppWindow = MainAppWindow()
 
     # load command line given library
     if args.lib is None:
