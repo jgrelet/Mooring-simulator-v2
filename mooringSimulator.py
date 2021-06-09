@@ -49,7 +49,13 @@ def startLogging(appName, debug=False):
         # fh.setLevel(logging.DEBUG)
         if debug:
             logging.basicConfig(
-            format='%(levelname)s:%(module)s %(funcName)s %(message)s', level=logging.DEBUG)
+                format='%(levelname)-8s [%(filename)s:%(funcName)s:%(lineno)d] %(message)s', level=logging.ERROR)
+            level = logging.DEBUG
+        else:
+            logging.basicConfig(
+                format='%(levelname)-8s [%(filename)s:%(lineno)d] %(message)s', level=logging.ERROR)
+            level = logging.ERROR
+
         #     fh = logging.StreamHandler()
         # else:
         #     fh = logging.FileHandler(Path(appName).with_suffix('.log'))
@@ -75,7 +81,7 @@ if __name__ == "__main__":
     startLogging(appName, args.debug)
 
     # Create and show the main application window
-    mainAppWindow = MainAppWindow()
+    mainAppWindow = MainAppWindow('test_logging')
 
     # load command line given library
     if args.lib is None:

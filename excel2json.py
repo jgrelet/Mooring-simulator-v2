@@ -10,6 +10,7 @@ class excel2json:
 
     def __init__(self, abspath):
         """ :param abspath: absolute path string to excel file """
+        self.logger = logging.getLogger(__name__)
         self._abspath = abspath
         self._worksheets = []
         self._hash = OrderedDict({})
@@ -23,7 +24,7 @@ class excel2json:
     def __getitem__(self, key):
         ''' overloading operators lib[key]'''
         if key not in self._hash:
-            logging.error(f"Error! excel2json.__getitem__.py: invalid key: \"{key}\"")
+            self.logger.error(f"Error! excel2json.__getitem__.py: invalid key: \"{key}\"")
         else:
             return self._hash[key]
 
@@ -46,7 +47,7 @@ class excel2json:
             self._worksheets = workbook.sheet_names()
             return self._worksheets
         except Exception as e:
-            logging.error(e)
+            self.logger.error(e)
 
     def __read_excel_sheet(self, sheet_name):
         """ Read the excel sheet and return it.
@@ -58,16 +59,16 @@ class excel2json:
             # return the specified worksheet
             return workbook.sheet_by_name(sheet_name)
         except FileNotFoundError as ex:
-            logging.error(
+            self.logger.error(
                 f"Something wrong with the path {self._abspath}. Error: {ex}.")
             return None
         except XLRDError as ex:
-            logging.error(
+            self.logger.error(
                 f"Something wrong happened while reading the Excel file. Error: {ex}"
             )
             return None
         except Exception as ex:
-            logging.error(
+            self.logger.error(
                 f"Something wrong happened while reading the Excel file. Error: {ex}"
             )
             return None
@@ -82,7 +83,7 @@ class excel2json:
         row_dict = OrderedDict({})
 
         if worksheet is None:
-            logging.info("Empty worksheet found.")
+            self.logger.info("Empty worksheet found.")
             return 1
 
         # store row 1 (column headers)
@@ -107,7 +108,7 @@ class excel2json:
         for sheet in self._worksheets:
             ws = self.__read_excel_sheet(sheet)
             self._hash[sheet] = self.__worksheet2json(ws)
-            logging.debug(self._hash[sheet])
+            self.logger.debug(self._hash[sheet])
         return self._hash
 
     def write(self, filename, path):
@@ -121,10 +122,10 @@ class excel2json:
                     self._hash, json_fd, sort_keys=False, indent=4)
             return 0
         except FileNotFoundError as ex:
-            logging.error(f'Something wrong with the path "{path}". Error: {ex}.')
+            self.logger.error(f'Something wrong with the path "{path}". Error: {ex}.')
             return 1
         except IOError as ex:
-            logging.error(
+            self.logger.error(
                 f'Something wrong happened while saving the file "{filename}.json". Error: {ex}.'
             )
             return 1
