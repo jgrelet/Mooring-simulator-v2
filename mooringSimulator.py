@@ -15,7 +15,10 @@ import argparse
 import logging
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QApplication
+from logs import configure_logger
 from mainAppWindow import MainAppWindow
+
+logger = logging.getLogger(__name__)
 
 
 def processArgs():
@@ -37,32 +40,6 @@ def processArgs():
     parser.add_argument('-d', '--debug', help='display debug informations',
                         action='store_true')
     return parser
-
-def startLogging(appName, debug=False):
-        # create logger
-        # logger = logging.getLogger('simple_example')
-        # logger.setLevel(logging.DEBUG)
-        # # create formatter
-        # formatter = logging.Formatter('%(asctime)s %(levelname)s %(module)s %(funcName)s %(message)s')
-        # # create console handler and set level to debug
-        # fh = logging.StreamHandler()
-        # fh.setLevel(logging.DEBUG)
-        if debug:
-            logging.basicConfig(
-                format='%(levelname)-8s [%(filename)s:%(funcName)s:%(lineno)d] %(message)s', level=logging.ERROR)
-            level = logging.DEBUG
-        else:
-            logging.basicConfig(
-                format='%(levelname)-8s [%(filename)s:%(lineno)d] %(message)s', level=logging.ERROR)
-            level = logging.ERROR
-
-        #     fh = logging.StreamHandler()
-        # else:
-        #     fh = logging.FileHandler(Path(appName).with_suffix('.log'))
-        # # add formatter to fh
-        # fh.setFormatter(formatter)
-        # # add fh to logger
-        # logger.addHandler(fh)
         
 # main function
 if __name__ == "__main__":
@@ -78,7 +55,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # start logging
-    startLogging(appName, args.debug)
+    configure_logger(stream_level='DEBUG' if args.debug else 'INFO', debug_file=Path(appName).with_suffix('.log'))
 
     # Create and show the main application window
     mainAppWindow = MainAppWindow('test_logging')
