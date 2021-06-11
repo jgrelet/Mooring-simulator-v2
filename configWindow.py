@@ -45,10 +45,12 @@ class ConfigWindow(QWidget):
             return self.__cfg[key]
 
     def __str__(self):
-        print(f"Window size = {self.__cfg['global']['screenWidth']} x {self.__cfg['global']['screenHeight']}")
-        print(f"Reference = {self.__cfg['config']['reference']}")
-        print(f"Bottom depth = {self.__cfg['config']['bottomDepth']}")
-        return ''
+        str = f"\n\
+        Window size = {self.__cfg['global']['screenWidth']} x {self.__cfg['global']['screenHeight']}\n\
+        Reference = {self.__cfg['config']['reference']} \n\
+        Bottom depth = {self.__cfg['config']['bottomDepth']} \n\
+        Debug = {self.__cfg['global']['debug']}"
+        return str
         
     def displayGlobalConfig(self):
         """ Build and display the configuration panel

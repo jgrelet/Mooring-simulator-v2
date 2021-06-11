@@ -3,17 +3,21 @@ from collections import OrderedDict
 import json
 import os
 import logging
-
+from version import NAME
 
 class excel2json:
     """ This class convert Mooring instrument in Excel file to JSON dictionary """
 
     def __init__(self, abspath):
         """ :param abspath: absolute path string to excel file """
-        self.logger = logging.getLogger(__name__)
-        self._abspath = abspath
+        # protected properties with decorators
         self._worksheets = []
         self._hash = OrderedDict({})
+        # private properties
+        self.__logger = logging.getLogger(NAME)
+        self.__logger.debug("Pass in excel2json.init()")
+        self.__abspath = abspath
+        # call methods
         self.__get_excel_sheets()
         self.read()
 
@@ -24,7 +28,7 @@ class excel2json:
     def __getitem__(self, key):
         ''' overloading operators lib[key]'''
         if key not in self._hash:
-            self.logger.error(f"Error! excel2json.__getitem__.py: invalid key: \"{key}\"")
+            self.__logger.error(f"Error! excel2json.__getitem__.py: invalid key: \"{key}\"")
         else:
             return self._hash[key]
 
@@ -43,11 +47,11 @@ class excel2json:
     def __get_excel_sheets(self):
         """ Get details of sheets found in the workbook. """
         try:
-            workbook = open_workbook(self._abspath)
+            workbook = open_workbook(self.__abspath)
             self._worksheets = workbook.sheet_names()
             return self._worksheets
         except Exception as e:
-            self.logger.error(e)
+            self.__logger.error(f"{e}, unable to open worksheet file")
 
     def __read_excel_sheet(self, sheet_name):
         """ Read the excel sheet and return it.
@@ -55,20 +59,20 @@ class excel2json:
         :return: worksheet object """
         # python module 'xlrd' supports .xls & .xlsx both
         try:
-            workbook = open_workbook(self._abspath)
+            workbook = open_workbook(self.__abspath)
             # return the specified worksheet
             return workbook.sheet_by_name(sheet_name)
         except FileNotFoundError as ex:
-            self.logger.error(
-                f"Something wrong with the path {self._abspath}. Error: {ex}.")
+            self.__logger.error(
+                f"Something wrong with the path {self.__abspath}. Error: {ex}.")
             return None
         except XLRDError as ex:
-            self.logger.error(
+            self.__logger.error(
                 f"Something wrong happened while reading the Excel file. Error: {ex}"
             )
             return None
         except Exception as ex:
-            self.logger.error(
+            self.__logger.error(
                 f"Something wrong happened while reading the Excel file. Error: {ex}"
             )
             return None
@@ -83,7 +87,7 @@ class excel2json:
         row_dict = OrderedDict({})
 
         if worksheet is None:
-            self.logger.info("Empty worksheet found.")
+            self.__logger.info("Empty worksheet found.")
             return 1
 
         # store row 1 (column headers)
@@ -108,7 +112,7 @@ class excel2json:
         for sheet in self._worksheets:
             ws = self.__read_excel_sheet(sheet)
             self._hash[sheet] = self.__worksheet2json(ws)
-            self.logger.debug(self._hash[sheet])
+            self.__logger.debug(self._hash[sheet])
         return self._hash
 
     def write(self, filename, path):
@@ -122,10 +126,10 @@ class excel2json:
                     self._hash, json_fd, sort_keys=False, indent=4)
             return 0
         except FileNotFoundError as ex:
-            self.logger.error(f'Something wrong with the path "{path}". Error: {ex}.')
+            self.__logger.error(f'Something wrong with the path "{path}". Error: {ex}.')
             return 1
         except IOError as ex:
-            self.logger.error(
+            self.__logger.error(
                 f'Something wrong happened while saving the file "{filename}.json". Error: {ex}.'
             )
             return 1

@@ -18,8 +18,6 @@ from PyQt5.QtWidgets import QApplication
 from logs import configure_logger
 from mainAppWindow import MainAppWindow
 
-logger = logging.getLogger(__name__)
-
 
 def processArgs():
     parser = argparse.ArgumentParser(
@@ -39,6 +37,8 @@ def processArgs():
                         action='store_true')
     parser.add_argument('-d', '--debug', help='display debug informations',
                         action='store_true')
+    parser.add_argument('-l', '--log', help='save log informations',
+                        action='store_true')                    
     return parser
         
 # main function
@@ -55,10 +55,15 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # start logging
-    configure_logger(stream_level='DEBUG' if args.debug else 'INFO', debug_file=Path(appName).with_suffix('.log'))
+    #logger = configure_logger(stream_level='DEBUG' if args.debug else 'INFO', debug_file=Path(appName).with_suffix('.log'))
+    #global logger 
+    logger = configure_logger(stream_level='DEBUG' if args.debug else 'INFO', 
+        debug_file=Path(appName).with_suffix('.log') if args.log else None)
+    logger.info("The program starts")
 
     # Create and show the main application window
-    mainAppWindow = MainAppWindow('test_logging')
+    #mainAppWindow = MainAppWindow('test_logging')
+    mainAppWindow = MainAppWindow()
 
     # load command line given library
     if args.lib is None:
@@ -106,13 +111,14 @@ if __name__ == "__main__":
     #mainAppWindow.cfg['global']['screenWidth'] = mainAppWindow.frameGeometry().width()
     #mainAppWindow.cfg['global']['screenHeight'] = mainAppWindow.frameGeometry().height()
 
-    # Debug config
+    # Debug config, just for testing, change debug value each time of the program is started
     debug = mainAppWindow.cfg['global']['debug']
     mainAppWindow.cfg['global']['debug'] = not debug
 
     # Save current config
     mainAppWindow.cfg.saveConfig()
-    logging.debug(print(mainAppWindow.cfg))
+    logger.debug(mainAppWindow.cfg)
 
     # Exit
+    logger.info("End of the program ...")
     sys.exit(ret)

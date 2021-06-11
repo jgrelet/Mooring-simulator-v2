@@ -1,6 +1,7 @@
 """Module for setting up logging."""
 import logging
 import sys
+from version import NAME
 
 LOG_LEVELS = {
     'DEBUG': logging.DEBUG,
@@ -11,23 +12,21 @@ LOG_LEVELS = {
 }
 
 LOG_FORMATS = {
-    'DEBUG': '%(levelname)s %(name)s: %(message)s',
+    'DEBUG': '%(levelname)-8s [%(filename)s:%(lineno)d]  %(message)s',
     'INFO': '%(levelname)s: %(message)s',
 }
 
 
-def configure_logger(stream_level='DEBUG', debug_file=None):
-    """Configure logging for cookiecutter.
-
-    Set up logging to stdout with given level. If ``debug_file`` is given set
-    up logging to file with DEBUG level.
+def configure_logger(stream_level='INFO', debug_file=None):
+    """Configure logging to stdout with given level. 
+    If ``debug_file`` is given set up logging to file with DEBUG level.
     """
-    # Set up 'cookiecutter' logger
-    logger = logging.getLogger('cookiecutter')
-    logger.setLevel(logging.DEBUG)
+    # Set up 'mooringSimulator' logger
+    logger = logging.getLogger(NAME)
+    logger.setLevel(LOG_LEVELS[stream_level])
 
     # Remove all attached handlers, in case there was
-    # a logger with using the name 'cookiecutter'
+    # a logger with using the name 'mooringSimulator'
     del logger.handlers[:]
 
     # Create a file handler if a log file is provided
