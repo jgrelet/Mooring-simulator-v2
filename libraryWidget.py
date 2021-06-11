@@ -11,6 +11,7 @@
 #import sys
 #from functools import partial
 import logging
+from version import NAME
 
 #from PyQt5.QtCore import Qt, QObject, pyqtSignal
 from PyQt5.QtGui import QIcon  # , QKeySequence
@@ -32,6 +33,9 @@ class LibraryWidget(QWidget):
 
     def __init__(self, filename):
         super(QWidget, self).__init__()
+
+        self.__logger = logging.getLogger(NAME)
+
         self.fileName = filename
         self.libraryLayout = QVBoxLayout(self)
 
@@ -79,7 +83,7 @@ class LibraryWidget(QWidget):
                 # display column value
                 columns = list(library[worksheet][row].keys())
                 for col, name in enumerate(columns):
-                    #logging.debug(f"col: {col}, {type(col)},name: {name}, {type(name)}")
+                    self.__logger.debug(f"col: {col}, {type(col)},name: {name}, {type(name)}")
                     label = QLabel(str(library[worksheet][row][name]))
                     color = 'black' if col else 'red' 
                     if not ind_row: color = 'green' 
