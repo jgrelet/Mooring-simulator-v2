@@ -37,7 +37,7 @@ run:
 	$(PYTHON) $(MAIN)
 	
 debug:
-	$(PYTHON) $(MAIN) -d
+	$(PYTHON) $(MAIN) -d -l
 	
 lib: 
 	$(PYTHON) $(MAIN) --lib library\test.xls
