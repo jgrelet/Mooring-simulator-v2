@@ -7,6 +7,7 @@ from os import path, makedirs
 from pathlib import Path
 import toml
 import logging
+from version import NAME
 
 
 class ConfigWindow(QWidget):
@@ -15,18 +16,20 @@ class ConfigWindow(QWidget):
     def __init__(self, pathName, appName, version):
         super(QWidget, self).__init__()
 
-        self.version = version
+        # private properties
+        self.__logger = logging.getLogger(NAME)
+        self.__version = version
          # setup toml configuration file, may be move in init function.
-        self.configPath = path.expandvars(f"$APPDATA/{pathName}")
-        if not path.exists(self.configPath):
-            makedirs(self.configPath)
-        self.configFile = Path(path.expandvars(f"{self.configPath}/{appName}")).with_suffix('.toml')
-        if not path.isfile(self.configFile):
+        self.__configPath = path.expandvars(f"$APPDATA/{pathName}")
+        if not path.exists(self.__configPath):
+            makedirs(self.__configPath)
+        self.__configFile = Path(path.expandvars(f"{self.__configPath}/{appName}")).with_suffix('.toml')
+        if not path.isfile(self.__configFile):
             self.saveDefaultConfig()
-        self.__cfg = toml.load(self.configFile)
-        if not "version" in self.__cfg or self.__cfg["version"] != self.version:
+        self.__cfg = toml.load(self.__configFile)
+        if not "version" in self.__cfg or self.__cfg["version"] != self.__version:
             self.saveDefaultConfig()
-            self.__cfg = toml.load(self.configFile)
+            self.__cfg = toml.load(self.__configFile)
 
         # Lock the window to a fixed size. In Qt sizes are defined using a QSize object. 
         # This accepts width and height parameters in that order
@@ -39,7 +42,7 @@ class ConfigWindow(QWidget):
     def __getitem__(self, key):
         ''' overload r[key] '''
         if key not in self.__cfg:
-            logging.error("invalid key: \"{}\"".format(key))
+            self.__logger.warning("invalid key: \"{}\"".format(key))
             return None
         else:
             return self.__cfg[key]
@@ -99,19 +102,19 @@ class ConfigWindow(QWidget):
         QObjectCleanupHandler().add(self.layout())
 
     def cancel(self):
-        logging.debug("Configuration cancelled...")
+        self.__logger.info("Configuration cancelled...")
         self.close()
     
     # Save current config
     def saveConfig(self): 
-        with open(self.configFile, 'w') as fid:
+        with open(self.__configFile, 'w') as fid:
             toml.dump(self.__cfg, fid)
 
     def saveDefaultConfig(self):
-        logging.info(f"Configuration file don't exist, create one from default config to {self.configFile}")
-        with open(self.configFile, 'w') as fid:
+        self.__logger.info(f"Configuration file don't exist, create one from default config to {self.__configFile}")
+        with open(self.__configFile, 'w') as fid:
             self.__cfg = ConfigWindow.getDefaultConfig()
-            self.__cfg['version'] = self.version
+            self.__cfg['version'] = self.__version
             toml.dump(self.__cfg, fid)
 
     @staticmethod

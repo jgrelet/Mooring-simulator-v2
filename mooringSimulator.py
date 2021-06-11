@@ -15,7 +15,7 @@ import argparse
 import logging
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QApplication
-from logs import configure_logger
+from logger import configure_logger
 from mainAppWindow import MainAppWindow
 
 
