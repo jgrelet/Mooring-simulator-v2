@@ -12,8 +12,9 @@ LOG_LEVELS = {
 }
 
 LOG_FORMATS = {
-    'DEBUG': '%(levelname)-8s [%(filename)s:%(lineno)d]  %(message)s',
-    'INFO': '%(levelname)s: %(message)s',
+    'DEBUG': '%(levelname)-5s [%(filename)s:%(lineno)d]  %(message)s',
+    'LOG': '%(levelname)-5s %(asctime)s [%(filename)s:%(lineno)d]  %(message)s',
+    'INFO': '%(levelname)-5s: %(message)s',
 }
 
 
@@ -31,7 +32,7 @@ def configure_logger(stream_level='INFO', debug_file=None):
 
     # Create a file handler if a log file is provided
     if debug_file is not None:
-        debug_formatter = logging.Formatter(LOG_FORMATS['DEBUG'])
+        debug_formatter = logging.Formatter(LOG_FORMATS['LOG'], datefmt='%m/%d/%Y %H:%M:%S')
         file_handler = logging.FileHandler(debug_file)
         file_handler.setLevel(LOG_LEVELS['DEBUG'])
         file_handler.setFormatter(debug_formatter)
