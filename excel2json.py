@@ -18,7 +18,6 @@ class excel2json:
         self.__logger.debug("Pass in excel2json.init()")
         self.__abspath = abspath
         # call methods
-        self.__get_excel_sheets()
         self.read()
 
     def __str__(self):
@@ -49,7 +48,6 @@ class excel2json:
         try:
             workbook = open_workbook(self.__abspath)
             self._worksheets = workbook.sheet_names()
-            return self._worksheets
         except Exception as e:
             self.__logger.error(f"{e}, unable to open worksheet file")
 
@@ -109,6 +107,7 @@ class excel2json:
     def read(self):
         """ Read an Excel file
         : return a dictionnary"""
+        self.__get_excel_sheets()
         for sheet in self._worksheets:
             ws = self.__read_excel_sheet(sheet)
             self._hash[sheet] = self.__worksheet2json(ws)
