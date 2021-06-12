@@ -1,18 +1,17 @@
 """Collection of tests around log handling."""
 import logging
-
 import unittest
-
-from logs import configure_logger
+from logger import configure_logger
+from version import NAME
 
 
 def create_log_records():
     """Test function, create log entries in expected stage of test."""
-    mooringSimulator_logger = logging.getLogger('mooringSimulator')
-    foo_logger = logging.getLogger('mooringSimulator.foo')
-    foobar_logger = logging.getLogger('mooringSimulator.foo.bar')
+    mooringSimulator_logger = logging.getLogger('NAME')
+    foo_logger = logging.getLogger(f"{NAME}.foo")
+    foobar_logger = logging.getLogger(f"{NAME}.foo.bar")
 
-    mooringSimulator_logger.info('Welcome to mooringSimulator')
+    mooringSimulator_logger.info(f"Welcome to {NAME}")
     mooringSimulator_logger.debug('Generating project from unittest-plugin')
     foo_logger.info('Loading user config from home dir')
     foobar_logger.debug("I don't know.")
