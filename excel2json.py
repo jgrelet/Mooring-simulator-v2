@@ -111,7 +111,7 @@ class excel2json:
         for sheet in self._worksheets:
             ws = self.__read_excel_sheet(sheet)
             self._hash[sheet] = self.__worksheet2json(ws)
-            self.__logger.debug(self._hash[sheet])
+            #self.__logger.debug(self._hash[sheet])
         return self._hash
 
     def write(self, filename, path):
