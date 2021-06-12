@@ -31,7 +31,7 @@ from PyQt5.QtWidgets import (
 )
 from libraryWidget import LibraryWidget
 from configWindow import ConfigWindow
-from version import NAME, VERSION
+from version import NAME, APPNAME, VERSION
 import qrc_resources
 
 
@@ -55,7 +55,7 @@ class MainAppWindow(QMainWindow, QObject):
         self.setWindowTitle(f"{NAME} v{VERSION}")
 
         # we use same name for directory and toml configuration file
-        self.cfg = ConfigWindow(NAME, NAME, VERSION)
+        self.cfg = ConfigWindow(NAME, APPNAME, VERSION)
         self.resize(self.cfg['global']['screenWidth'],
                     self.cfg['global']['screenHeight'])
         self.fileName = file_name
