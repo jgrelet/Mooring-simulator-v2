@@ -123,7 +123,7 @@ class excel2json:
                 # beautify JSON with indentation
                 json.dump(
                     self._hash, json_fd, sort_keys=False, indent=4)
-            return 0
+            return json_file
         except FileNotFoundError as ex:
             self.__logger.error(f'Something wrong with the path "{path}". Error: {ex}.')
             return 1
