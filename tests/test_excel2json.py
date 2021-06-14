@@ -8,7 +8,27 @@ from version import NAME
 
 class testExcel2json(unittest.TestCase):
 
-    #def setUp(self):
+    # {
+    # "Sheet": {
+    #     "1": {
+    #         "Column1": "row1"
+    #     },
+    #     "2": {
+    #         "Column1": "row2"
+    #     }
+    # }
+
+
+    def setUp(self):
+
+        self.hash = {
+            "1": {
+                "Column1": "row1"
+            },
+            "2": {
+                "Column1": "row2"
+            }
+        }
 
     # def test_init_logging_info(self):
     #     """ Test init logging with level info"""
@@ -26,6 +46,16 @@ class testExcel2json(unittest.TestCase):
         """ Test the worksheet name = sheet """
         self.form = excel2json("tests/test.xls")
         self.assertEqual(['Sheet'], self.form.worksheets)
+
+    def test_3_worksheet_values(self):
+        ''' Test default values in Excel test.xls'''
+        self.form = excel2json("tests/test.xls")
+        h = self.form.toDict()
+        d = h['Sheet']
+        for k in d.keys():
+            self.assertEqual(d[k], self.hash[k])
+
+    # add write test.json, remove file, add and delete values
 
 if __name__ == '__main__':
     unittest.main()

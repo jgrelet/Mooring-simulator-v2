@@ -135,18 +135,33 @@ class excel2json:
 
 
 if __name__ == '__main__':
-    # print(excel2json.convert('test.xlsx'))
-    filename = 'library/test.xls'
-    lib = excel2json(filename)
+
+    from logger import configure_logger
+    logger = configure_logger('INFO')
+    logger = logging.getLogger(NAME)
+    logger.info("Logging OK.")
+
+    # lib = excel2json('library/example.xls')
+    # sheet_names = lib.worksheets
+    # print(sheet_names, end='\n\n')
+    # # print(lib)
+    # # print(lib['Anchors'][1], end='\n\n')
+    # lib.write('test', 'library')
+    # # fd = open('library/test.json', 'r')
+    # # h = json.load(fd)
+    # #h = json.loads(lib.__str__())
+    # h = lib.toDict()
+    # print(h['Releases'], end='\n\n')
+    # print(h['Anchors']['1'], end='\n\n')
+    # print(h['Ropes']['1'].keys(), end='\n\n')
+
+    lib = excel2json('tests/test.xls')
     sheet_names = lib.worksheets
     print(sheet_names, end='\n\n')
-    # print(lib)
-    # print(lib['Anchors'][1], end='\n\n')
-    lib.write('test', 'library')
-    # fd = open('library/test.json', 'r')
-    # h = json.load(fd)
-    #h = json.loads(lib.__str__())
+    lib.write('test', 'tests')
     h = lib.toDict()
-    print(h['Releases'], end='\n\n')
-    print(h['Anchors']['1'], end='\n\n')
-    print(h['Ropes']['1'].keys(), end='\n\n')
+    print(h['Sheet'], end='\n\n')
+    print(h['Sheet']['1'], end='\n\n')
+    print(h['Sheet']['2'], end='\n\n')
+    #print(h['Sheet']['3'], end='\n\n')
+    print(h['dummy']['1'], end='\n\n')
