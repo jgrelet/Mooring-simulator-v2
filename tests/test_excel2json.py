@@ -23,7 +23,7 @@ class testExcel2json(unittest.TestCase):
             self.assertEqual([f"DEBUG:{NAME}:Pass in excel2json.init()"],lc.output)
 
     def test_worksheet_name(self):
-        """ Test the worksheet name """
+        """ Test the worksheet name = sheet """
         self.form = excel2json("tests/test.xls")
         self.assertEqual(['Sheet'], self.form.worksheets)
 

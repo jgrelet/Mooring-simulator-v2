@@ -43,7 +43,7 @@ class excel2json:
         : return object as a JSON dictonary'''
         return self._hash
 
-    def __get_excel_sheets(self):
+    def __get_sheet_names(self):
         """ Get details of sheets found in the workbook. """
         try:
             workbook = open_workbook(self.__abspath)
@@ -51,7 +51,7 @@ class excel2json:
         except Exception as e:
             self.__logger.error(f"{e}, unable to open worksheet file")
 
-    def __read_excel_sheet(self, sheet_name):
+    def __read_sheet(self, sheet_name):
         """ Read the excel sheet and return it.
         :param sheet_name: target excel sheet name string
         :return: worksheet object """
@@ -101,15 +101,15 @@ class excel2json:
         return ws_dict
 
     def toDict(self):
-        ''' return python dictionary from JSON string'''
+        ''' return python ordered dictionary from JSON string'''
         return OrderedDict(json.loads(self.__str__(), object_pairs_hook=OrderedDict))
 
     def read(self):
         """ Read an Excel file
         : return a dictionnary"""
-        self.__get_excel_sheets()
+        self.__get_sheet_names()
         for sheet in self._worksheets:
-            ws = self.__read_excel_sheet(sheet)
+            ws = self.__read_sheet(sheet)
             self._hash[sheet] = self.__worksheet2json(ws)
             #self.__logger.debug(self._hash[sheet])
         return self._hash
