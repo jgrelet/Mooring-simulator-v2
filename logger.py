@@ -13,8 +13,11 @@ LOG_LEVELS = {
 
 LOG_FORMATS = {
     'DEBUG': '%(levelname)-5s [%(filename)s:%(lineno)d]  %(message)s',
-    'LOG': '%(levelname)-5s %(asctime)s [%(filename)s:%(lineno)d]  %(message)s',
     'INFO': '%(levelname)-5s: %(message)s',
+    'WARNING': '%(levelname)-5s: %(message)s',
+    'ERROR': '%(levelname)-5s [%(filename)s:%(lineno)d]  %(message)s',
+    'CRITICAL': '%(levelname)-5s [%(filename)s:%(lineno)d]  %(message)s',
+    'LOG': '%(levelname)-5s %(asctime)s [%(filename)s:%(lineno)d]  %(message)s',
 }
 
 
