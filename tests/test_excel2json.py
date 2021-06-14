@@ -1,6 +1,8 @@
 """Collection of tests around log handling."""
 import logging
 import unittest
+import shutil, tempfile
+from os import path
 from logger import configure_logger
 from excel2json import excel2json
 from version import NAME
@@ -8,19 +10,9 @@ from version import NAME
 
 class testExcel2json(unittest.TestCase):
 
-    # {
-    # "Sheet": {
-    #     "1": {
-    #         "Column1": "row1"
-    #     },
-    #     "2": {
-    #         "Column1": "row2"
-    #     }
-    # }
-
-
     def setUp(self):
 
+        # test.xls dump dict
         self.hash = {
             "1": {
                 "Column1": "row1"
@@ -29,6 +21,23 @@ class testExcel2json(unittest.TestCase):
                 "Column1": "row2"
             }
         }
+        self.dump = '''{
+    "Sheet": {
+        "1": {
+            "Column1": "row1"
+        },
+        "2": {
+            "Column1": "row2"
+        }
+    }
+}'''
+
+        # Create a temporary directory
+        self.test_dir = tempfile.mkdtemp()
+
+    def tearDown(self):
+        # Remove the directory after the test
+        shutil.rmtree(self.test_dir)
 
     # def test_init_logging_info(self):
     #     """ Test init logging with level info"""
@@ -47,13 +56,21 @@ class testExcel2json(unittest.TestCase):
         self.form = excel2json("tests/test.xls")
         self.assertEqual(['Sheet'], self.form.worksheets)
 
-    def test_3_worksheet_values(self):
-        ''' Test default values in Excel test.xls'''
+    def test_worksheet_values(self):
+        """ Test default values in Excel test.xls"""
         self.form = excel2json("tests/test.xls")
         h = self.form.toDict()
         d = h['Sheet']
         for k in d.keys():
             self.assertEqual(d[k], self.hash[k])
+
+    def test_write_json(self):
+        """ Test write to json tmp file """
+        self.form = excel2json("tests/test.xls")
+        file = self.form.write('test', self.test_dir)
+        fd = open(path.join(self.test_dir, 'test.json'), 'r')
+        self.assertEqual(fd.read(), self.dump)
+        fd.close()
 
     # add write test.json, remove file, add and delete values
 
