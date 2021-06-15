@@ -27,7 +27,7 @@ class excel2json:
     def __getitem__(self, key):
         ''' overloading operators lib[key]'''
         if key not in self._hash:
-            self.__logger.error(f"Error! excel2json.__getitem__.py: invalid key: \"{key}\"")
+            self.__logger.error(f"excel2json.__getitem__.py: invalid key: \"{key}\"")
         else:
             return self._hash[key]
 
@@ -105,7 +105,7 @@ class excel2json:
         return OrderedDict(json.loads(self.__str__(), object_pairs_hook=OrderedDict))
 
     def read(self):
-        """ Read an Excel file
+        """ Read an Excel file, store each worksheet in a hash
         : return a dictionnary"""
         self.__get_sheet_names()
         for sheet in self._worksheets:
@@ -159,9 +159,12 @@ if __name__ == '__main__':
     sheet_names = lib.worksheets
     print(sheet_names, end='\n\n')
     lib.write('test', 'tests')
+    print(lib['Sheet']['1'])
+    print(lib['Sheet']['2'])
+    print(lib['dummy'])
     h = lib.toDict()
     print(h['Sheet'], end='\n\n')
     print(h['Sheet']['1'], end='\n\n')
     print(h['Sheet']['2'], end='\n\n')
     #print(h['Sheet']['3'], end='\n\n')
-    print(h['dummy']['1'], end='\n\n')
+    # print(h['dummy']['1'], end='\n\n')
