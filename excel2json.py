@@ -7,10 +7,15 @@ from version import NAME
 
 
 class excel2json:
-    """ This class convert Mooring instrument in Excel file to JSON dictionary """
+    """This class convert Mooring instrument in Workbook Excel
+     file to an ordered JSON dictionary """
 
     def __init__(self, abspath):
-        """ :param abspath: absolute path string to excel file """
+        """excel2json constructor from Workbook Excel file name.
+
+        Args:
+            abspath (str): absolute path string to Workbook Excel file
+        """
         # protected properties with decorators
         self._worksheets = []
         self._hash = OrderedDict({})
@@ -22,7 +27,11 @@ class excel2json:
         self.read()
 
     def __str__(self):
-        ''' overload print()'''
+        """Overload print() method
+
+        Returns:
+            str: a JSON dump of the Workbook
+        """
         return json.dumps(self._hash, sort_keys=False, indent=4)
 
     def __getitem__(self, key):
@@ -35,18 +44,25 @@ class excel2json:
 
     @property
     def worksheets(self):
-        ''' worksheets getter
-        : return worksheet names as a list'''
+        """Getter to protected worksheets property 
+
+        Returns:
+            list: the list of sheets found in the Workbook
+        """
         return self._worksheets
 
     @property
     def hash(self):
-        ''' dictonary getter
-        : return object as a JSON dictonary'''
+        """Getter to protected hash dictionary property
+       
+        Returns:
+            OrderedDict: an object as a JSON dictonary
+        """
         return self._hash
 
     def __get_sheet_names(self):
-        """ Get details of sheets found in the workbook. """
+        """Get the list of sheets found in the Workbook.
+        """
         try:
             workbook = open_workbook(self.__abspath)
             self._worksheets = workbook.sheet_names()
@@ -54,9 +70,15 @@ class excel2json:
             self.__logger.error(f"{e}, unable to open worksheet file")
 
     def __read_sheet(self, sheet_name):
-        """ Read the excel sheet and return it.
-        :param sheet_name: target excel sheet name string
-        :return: worksheet object """
+        """Read the Workbook sheet and return it.
+
+        Args:
+            sheet_name (str): target Workbook sheet name string
+            to be opened
+
+        Returns:
+            Book: An instance of the ~xlrd.book.Book class.
+        """
         # python module 'xlrd' supports .xls & .xlsx both
         try:
             workbook = open_workbook(self.__abspath)
@@ -78,10 +100,13 @@ class excel2json:
             return None
 
     def __worksheet2json(self, worksheet):
-        r"""
-        Read an excel sheet.
-        :param worksheet: worksheet object
-        :return: a dictionnary
+        """Read an Workbook worksheet as a ordered dictionary
+
+        Args:
+            worksheet (str): worksheet name
+
+        Returns:
+            OrderedDict: an ordered dictionary containing the data
         """
         ws_dict = OrderedDict({})
         row_dict = OrderedDict({})
@@ -103,12 +128,20 @@ class excel2json:
         return ws_dict
 
     def toDict(self):
-        ''' return python ordered dictionary from JSON string'''
+        """Return python ordered dictionary from JSON string
+
+        Returns:
+            OrderedDict: a JSON string representing the worksheet data
+        """
         return OrderedDict(json.loads(self.__str__(), object_pairs_hook=OrderedDict))
 
     def read(self):
-        """ Read an Excel file, store each worksheet in a hash
-        : return a dictionnary"""
+        """Read an Workbook (Excel) file, store each worksheet
+        in a hash
+
+        Returns:
+            OrderedDict: an ordered dictionary containing the data
+        """
         self.__get_sheet_names()
         for sheet in self._worksheets:
             ws = self.__read_sheet(sheet)
@@ -117,7 +150,15 @@ class excel2json:
         return self._hash
 
     def write(self, filename, path):
-        """ :param loc: directory path string (to save files) """
+        """Write the Workbook as a JSON file
+
+        Args:
+            filename (str): JSON file name
+            path (str):  path 
+
+        Returns:
+            str: the full path name, none in case of failure 
+        """
         # dump list of dict to JSON file
         try:
             json_file = os.path.join(path, filename + '.json')
@@ -129,12 +170,12 @@ class excel2json:
         except FileNotFoundError as ex:
             self.__logger.error(
                 f'Something wrong with the path "{path}". Error: {ex}.')
-            return 1
+            return None
         except IOError as ex:
             self.__logger.error(
                 f'Something wrong happened while saving the file "{filename}.json". Error: {ex}.'
             )
-            return 1
+            return None
 
 
 if __name__ == '__main__':

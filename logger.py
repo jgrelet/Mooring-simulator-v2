@@ -22,8 +22,14 @@ LOG_FORMATS = {
 
 
 def configure_logger(stream_level='INFO', debug_file=None):
-    """Configure logging to stdout with given level. 
-    If ``debug_file`` is given set up logging to file with DEBUG level.
+    """Configure logging with the given level.
+
+    Args:
+        stream_level (str, optional): set up logging level. Defaults to 'INFO'.
+        debug_file (str, optional): write logging to file. Defaults to None.
+ 
+    Returns:
+        logger: a reference to a logger instance
     """
     # Set up 'mooringSimulator' logger
     logger = logging.getLogger(NAME)

@@ -29,9 +29,15 @@ from constants import STYLE_SPREADSHEET_TEXT
 
 
 class LibraryWidget(QWidget):
-    ''' this class display library'''
+    """This class display a library in a table panel
+    """
 
     def __init__(self, filename):
+        """LibraryWidget constructor
+
+        Args:
+            filename (string): The Excel .xls library file
+        """
         super(QWidget, self).__init__()
 
         self.__logger = logging.getLogger(NAME)
@@ -51,11 +57,19 @@ class LibraryWidget(QWidget):
         #sheet_names = library.worksheets
 
     def read(self):
-        ''' read and convert Excel file to JSON python dict'''
+        """Read and convert Excel file to JSON Python dictionary
+
+        Returns:
+            dict: a dictionary description of the library file
+        """
         return excel2json(self.fileName)
 
     def display(self):
-        ''' display library inside MDI window '''
+        """Display library inside MDI window in table panel
+
+        Returns:
+            QMdiArea: an instance of a QMdiArea object
+        """
         libraryArea = QMdiArea(self)
         library = self.library.toDict()
         for worksheet in self.library.worksheets:

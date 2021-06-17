@@ -20,6 +20,11 @@ from mainAppWindow import MainAppWindow
 
 
 def processArgs():
+    """Process optional command line argument
+
+    Returns:
+        argparse: an instance of argparse class
+    """
     parser = argparse.ArgumentParser(
         description='Mooring simulator program ',
         usage='\npython MooringSimulator.py --file <file> --lib <file> -d -h\n'
@@ -44,7 +49,8 @@ def processArgs():
 
 # main function
 if __name__ == "__main__":
-    ''' Mooring simulator program entry point'''
+    """Mooring simulator main program entry point
+    """
 
     # Create the application handler
     app = QApplication([])
