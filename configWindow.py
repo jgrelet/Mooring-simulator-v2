@@ -1,7 +1,7 @@
 """ConfigWindow class, part of Mooring simulator PyQt5 application."""
 
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import QSize, Qt, QObjectCleanupHandler #, QObject, pyqtSignal
+from PyQt5.QtCore import QSize, Qt, QObjectCleanupHandler  # , QObject, pyqtSignal
 from functools import partial
 from os import path, makedirs
 from pathlib import Path
@@ -13,17 +13,19 @@ from version import NAME
 class ConfigWindow(QWidget):
     ''' This class display configuration window, and save in toml file
     '''
+
     def __init__(self, pathName, appName, version):
         super(QWidget, self).__init__()
 
         # private properties
         self.__logger = logging.getLogger(NAME)
         self.__version = version
-         # setup toml configuration file, may be move in init function.
+        # setup toml configuration file, may be move in init function.
         self.__configPath = path.expandvars(f"$APPDATA/{pathName}")
         if not path.exists(self.__configPath):
             makedirs(self.__configPath)
-        self.__configFile = Path(path.expandvars(f"{self.__configPath}/{appName}")).with_suffix('.toml')
+        self.__configFile = Path(path.expandvars(
+            f"{self.__configPath}/{appName}")).with_suffix('.toml')
         if not path.isfile(self.__configFile):
             self.saveDefaultConfig()
         self.__cfg = toml.load(self.__configFile)
@@ -31,9 +33,9 @@ class ConfigWindow(QWidget):
             self.saveDefaultConfig()
             self.__cfg = toml.load(self.__configFile)
 
-        # Lock the window to a fixed size. In Qt sizes are defined using a QSize object. 
+        # Lock the window to a fixed size. In Qt sizes are defined using a QSize object.
         # This accepts width and height parameters in that order
-        self.setFixedSize(QSize(250,200))
+        self.setFixedSize(QSize(250, 200))
 
         # Create the stacked layout
         #self.stackedLayout = QStackedLayout()
@@ -54,7 +56,7 @@ class ConfigWindow(QWidget):
         Bottom depth = {self.__cfg['config']['bottomDepth']} \n\
         Debug = {self.__cfg['global']['debug']}"
         return str
-        
+
     def displayGlobalConfig(self):
         """ Build and display the configuration panel
         """
@@ -63,13 +65,15 @@ class ConfigWindow(QWidget):
         formLayout = QFormLayout()
         self.screenWidth = QLineEdit(str(self.__cfg['global']['screenWidth']))
         self.screenWidth.setInputMask("0000")
-        self.screenHeight = QLineEdit(str(self.__cfg['global']['screenHeight']))
+        self.screenHeight = QLineEdit(
+            str(self.__cfg['global']['screenHeight']))
         self.screenHeight.setInputMask("0000")
         self.reference = QComboBox()
-        self.reference.addItems([ "surface","bottom"])
-        index = self.reference.findText(self.__cfg['config']['reference'], Qt.MatchFixedString)
+        self.reference.addItems(["surface", "bottom"])
+        index = self.reference.findText(
+            self.__cfg['config']['reference'], Qt.MatchFixedString)
         if index >= 0:
-             self.reference.setCurrentIndex(index)
+            self.reference.setCurrentIndex(index)
         self.bottomDepth = QLineEdit(str(self.__cfg['config']['bottomDepth']))
         self.bottomDepth.setInputMask("0000")
         formLayout.addRow("Screen width", self.screenWidth)
@@ -86,9 +90,9 @@ class ConfigWindow(QWidget):
         dlgLayout.addLayout(formLayout)
         dlgLayout.addWidget(self.btnBox)
         self.setLayout(dlgLayout)
- 
-        #self.stackedLayout.addWidget(self.config)
-        #self.setCentralWidget(self.config)
+
+        # self.stackedLayout.addWidget(self.config)
+        # self.setCentralWidget(self.config)
 
     def accept(self):
         self.__cfg['global']['screenWidth'] = int(self.screenWidth.text())
@@ -104,14 +108,15 @@ class ConfigWindow(QWidget):
     def cancel(self):
         self.__logger.info("Configuration cancelled...")
         self.close()
-    
+
     # Save current config
-    def saveConfig(self): 
+    def saveConfig(self):
         with open(self.__configFile, 'w') as fid:
             toml.dump(self.__cfg, fid)
 
     def saveDefaultConfig(self):
-        self.__logger.info(f"Configuration file don't exist, create one from default config to {self.__configFile}")
+        self.__logger.info(
+            f"Configuration file don't exist, create one from default config to {self.__configFile}")
         with open(self.__configFile, 'w') as fid:
             self.__cfg = ConfigWindow.getDefaultConfig()
             self.__cfg['version'] = self.__version
@@ -137,6 +142,7 @@ class ConfigWindow(QWidget):
         """
         return toml.loads(toml_string)
 
+
 # for testing in standalone context
 # ---------------------------------
 if __name__ == "__main__":
@@ -148,10 +154,9 @@ if __name__ == "__main__":
     appName = Path(__file__).with_suffix('').stem
 
     cfg = ConfigWindow(appName, appName, "1.03")
-    cfg.displayGlobalConfig() 
+    cfg.displayGlobalConfig()
     cfg.show()
 
     # Run the event loop
     app.exec_()
     print(cfg)
-

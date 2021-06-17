@@ -54,7 +54,6 @@ class LibraryWidget(QWidget):
         ''' read and convert Excel file to JSON python dict'''
         return excel2json(self.fileName)
 
-    
     def display(self):
         ''' display library inside MDI window '''
         libraryArea = QMdiArea(self)
@@ -83,10 +82,12 @@ class LibraryWidget(QWidget):
                 # display column value
                 columns = list(library[worksheet][row].keys())
                 for col, name in enumerate(columns):
-                    self.__logger.debug(f"col: {col}, {type(col)},name: {name}, {type(name)}")
+                    self.__logger.debug(
+                        f"col: {col}, {type(col)},name: {name}, {type(name)}")
                     label = QLabel(str(library[worksheet][row][name]))
-                    color = 'black' if col else 'red' 
-                    if not ind_row: color = 'green' 
+                    color = 'black' if col else 'red'
+                    if not ind_row:
+                        color = 'green'
                     styleSheet = f"background-color : white; color : {color}; border: 1px solid black"
                     label.setStyleSheet(styleSheet)
                     grid.addWidget(label, 1+ind_row, col)

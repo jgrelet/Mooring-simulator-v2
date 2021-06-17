@@ -5,6 +5,7 @@ import os
 import logging
 from version import NAME
 
+
 class excel2json:
     """ This class convert Mooring instrument in Excel file to JSON dictionary """
 
@@ -27,7 +28,8 @@ class excel2json:
     def __getitem__(self, key):
         ''' overloading operators lib[key]'''
         if key not in self._hash:
-            self.__logger.error(f"excel2json.__getitem__.py: invalid key: \"{key}\"")
+            self.__logger.error(
+                f"excel2json.__getitem__.py: invalid key: \"{key}\"")
         else:
             return self._hash[key]
 
@@ -111,7 +113,7 @@ class excel2json:
         for sheet in self._worksheets:
             ws = self.__read_sheet(sheet)
             self._hash[sheet] = self.__worksheet2json(ws)
-            #self.__logger.debug(self._hash[sheet])
+            # self.__logger.debug(self._hash[sheet])
         return self._hash
 
     def write(self, filename, path):
@@ -125,7 +127,8 @@ class excel2json:
                     self._hash, json_fd, sort_keys=False, indent=4)
             return json_file
         except FileNotFoundError as ex:
-            self.__logger.error(f'Something wrong with the path "{path}". Error: {ex}.')
+            self.__logger.error(
+                f'Something wrong with the path "{path}". Error: {ex}.')
             return 1
         except IOError as ex:
             self.__logger.error(

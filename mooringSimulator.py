@@ -38,9 +38,10 @@ def processArgs():
     parser.add_argument('-d', '--debug', help='display debug informations',
                         action='store_true')
     parser.add_argument('-l', '--log', help='save log informations',
-                        action='store_true')                    
+                        action='store_true')
     return parser
-        
+
+
 # main function
 if __name__ == "__main__":
     ''' Mooring simulator program entry point'''
@@ -49,16 +50,16 @@ if __name__ == "__main__":
     app = QApplication([])
 
     appName = Path(__file__).with_suffix('').stem
-    
+
     # Recover and process optionnal line arguments
     parser = processArgs()
     args = parser.parse_args()
 
     # start logging
     #logger = configure_logger(stream_level='DEBUG' if args.debug else 'INFO', debug_file=Path(appName).with_suffix('.log'))
-    #global logger 
-    logger = configure_logger(stream_level='DEBUG' if args.debug else 'INFO', 
-        debug_file=Path(appName).with_suffix('.log') if args.log else None)
+    #global logger
+    logger = configure_logger(stream_level='DEBUG' if args.debug else 'INFO',
+                              debug_file=Path(appName).with_suffix('.log') if args.log else None)
     logger.info("The program starts")
 
     # Create and show the main application window

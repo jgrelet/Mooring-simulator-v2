@@ -419,7 +419,7 @@ class MainAppWindow(QMainWindow, QObject):
         self.libraryDockWidget.setWidget(self.library)
         #Ajoute la bibliotheque dans le DockWidget en position haute#
         self.addDockWidget(Qt.TopDockWidgetArea,
-                        self.libraryDockWidget)
+                           self.libraryDockWidget)
         self.libraryDockWidget.setWindowTitle('Library')
         # send a signal to statusbar for testing only
         self.trigger.emit()

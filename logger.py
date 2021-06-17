@@ -35,7 +35,8 @@ def configure_logger(stream_level='INFO', debug_file=None):
 
     # Create a file handler if a log file is provided
     if debug_file is not None:
-        debug_formatter = logging.Formatter(LOG_FORMATS['LOG'], datefmt='%m/%d/%Y %H:%M:%S')
+        debug_formatter = logging.Formatter(
+            LOG_FORMATS['LOG'], datefmt='%m/%d/%Y %H:%M:%S')
         file_handler = logging.FileHandler(debug_file)
         file_handler.setLevel(LOG_LEVELS['DEBUG'])
         file_handler.setFormatter(debug_formatter)

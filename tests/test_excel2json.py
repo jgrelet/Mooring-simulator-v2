@@ -1,7 +1,8 @@
 """Collection of tests around log handling."""
 import logging
 import unittest
-import shutil, tempfile
+import shutil
+import tempfile
 from os import path
 from logger import configure_logger
 from excel2json import excel2json
@@ -49,7 +50,8 @@ class testExcel2json(unittest.TestCase):
         """ Test init logging with level debug"""
         with self.assertLogs(NAME, level='DEBUG') as lc:
             self.form = excel2json("tests/test.xls")
-            self.assertEqual([f"DEBUG:{NAME}:Pass in excel2json.init()"],lc.output)
+            self.assertEqual(
+                [f"DEBUG:{NAME}:Pass in excel2json.init()"], lc.output)
 
     def test_worksheet_name(self):
         """ Test the worksheet name = sheet """
@@ -73,6 +75,7 @@ class testExcel2json(unittest.TestCase):
         fd.close()
 
     # add write test.json, remove file, add and delete values
+
 
 if __name__ == '__main__':
     unittest.main()
