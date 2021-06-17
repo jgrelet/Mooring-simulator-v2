@@ -113,7 +113,7 @@ class excel2json:
 
         if worksheet is None:
             self.__logger.info("Empty worksheet found.")
-            return 1
+            return None
 
         # store row 1 (column headers)
         header = [cell.value for cell in worksheet.row(0)]
