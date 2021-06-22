@@ -20,7 +20,6 @@ from PyQt5.QtCore import Qt, QObject, pyqtSignal
 from PyQt5.QtGui import QIcon, QKeySequence
 from PyQt5.QtWidgets import (
     QAction,
-    QApplication,
     QLabel,
     QMainWindow,
     QMenu,

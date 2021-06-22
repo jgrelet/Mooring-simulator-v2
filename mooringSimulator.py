@@ -6,7 +6,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-"""Mooring simulator PyQt application."""
+"""Mooring simulator, an Python/Qt application for designing oceanographic moorings."""
 
 import sys
 from os import path

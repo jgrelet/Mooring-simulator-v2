@@ -6,14 +6,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-"""Mooring simulator PyQt application."""
+"""A class that allows to display a library of components in table panel."""
 
-#import sys
-#from functools import partial
 import logging
 from version import NAME
 
-#from PyQt5.QtCore import Qt, QObject, pyqtSignal
 from PyQt5.QtGui import QIcon  # , QKeySequence
 from PyQt5.QtWidgets import (
     QWidget,
@@ -29,7 +26,7 @@ from constants import STYLE_SPREADSHEET_TEXT
 
 
 class LibraryWidget(QWidget):
-    """This class display a library in a table panel
+    """This class display a library in a table panel.
     """
 
     def __init__(self, filename):
