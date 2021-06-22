@@ -9,9 +9,7 @@
 """A class that allows to display a library of components in table panel."""
 
 import logging
-from version import NAME
-
-from PyQt5.QtGui import QIcon  # , QKeySequence
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (
     QWidget,
     QTabWidget,
@@ -21,8 +19,10 @@ from PyQt5.QtWidgets import (
     QScrollArea,
     QGridLayout,
 )
+
 from excel2json import excel2json
 from constants import STYLE_SPREADSHEET_TEXT
+from version import NAME
 
 
 class LibraryWidget(QWidget):

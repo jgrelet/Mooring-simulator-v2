@@ -1,13 +1,13 @@
 """Collection of tests around log handling."""
-import logging
+
 import unittest
 import shutil
 import tempfile
 from os import path
+
 from logger import configure_logger
 from excel2json import excel2json
 from version import NAME
-
 
 class testExcel2json(unittest.TestCase):
 

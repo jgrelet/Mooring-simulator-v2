@@ -12,9 +12,9 @@ import sys
 from os import path
 from pathlib import Path
 import argparse
-import logging
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QApplication
+
 from logger import configure_logger
 from mainAppWindow import MainAppWindow
 

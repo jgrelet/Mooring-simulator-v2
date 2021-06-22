@@ -14,7 +14,6 @@ import subprocess
 from functools import partial
 from math import floor
 from pathlib import Path
-import logging
 
 from PyQt5.QtCore import Qt, QObject, pyqtSignal
 from PyQt5.QtGui import QIcon, QKeySequence
@@ -28,6 +27,7 @@ from PyQt5.QtWidgets import (
     QFileDialog,
     QDockWidget,
 )
+
 from libraryWidget import LibraryWidget
 from configWindow import ConfigWindow
 from version import NAME, APPNAME, VERSION

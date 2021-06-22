@@ -1,13 +1,18 @@
-from configWindow import ConfigWindow
-from PyQt5.QtTest import QTest
+"""Collection of tests around log handling."""
+
+
 import unittest
 import sys
+from PyQt5.QtTest import QTest
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication
-"""All tests use the same single global instance of QApplication."""
-
 from PyQt5.QtWidgets import QWidget
-"""The tests individually instantiate the top-level window as a QWidget."""
+
+from configWindow import ConfigWindow
+
+"""All tests use the same single global instance of QApplication.
+The tests individually instantiate the top-level window as a QWidget.
+"""
 
 
 '''

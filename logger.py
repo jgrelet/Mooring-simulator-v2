@@ -1,6 +1,8 @@
 """Module for setting up logging."""
+
 import logging
 import sys
+
 from version import NAME
 
 LOG_LEVELS = {
