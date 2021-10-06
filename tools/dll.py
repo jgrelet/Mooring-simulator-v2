@@ -32,6 +32,20 @@ class Sentinel_DLL:
             return self.sentinel.next
 
     # Insert a new node with data after node x.
+    def insert_before(self, x, data):
+        y = Node(data)   # make a new Node object.
+
+        # Fix up the links in the new node.
+        y.next = x
+        y.prev = x.prev
+
+        # The new node previous x.
+        x.prev = y
+
+        # And it's the previous node of its next node.
+        y.prev.next = y
+
+    # Insert a new node with data after node x.
     def insert_after(self, x, data):
         y = Node(data)   # make a new Node object.
 
