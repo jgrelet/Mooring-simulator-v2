@@ -24,7 +24,7 @@ def test_sentinel_DLL():
         l.delete(node)
     print(l)
 
-    # Add Ohio after Idaho.
+    # Add Paris after Ohio.
     node = l.find("Ohio")
     if node != None:
         print(node.get_data())
@@ -33,6 +33,20 @@ def test_sentinel_DLL():
 
     l.prepend("Nantes")
     print(l)
+
+    # Add Brest before Ohio.
+    node = l.find("Ohio")
+    if node != None:
+        print(node.get_data())
+        l.insert_before(node, "Brest")
+    print(l)
+
+    node = l.find("Brest")
+    if node != None:
+        print(node.get_data())
+        l.insert_after(node, {'Float','45'})
+    print(l)
+
 
     # Empty out the list, one node at a time.
     while l.first_node() != None:
