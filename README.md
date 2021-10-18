@@ -37,6 +37,14 @@ pip install PyQt5 qt5-applications qt5-tools xlrd
 
 ```
 
+## Export your environment
+
+Duplicate your environment on other computer or OS, just export it to a YAML file:
+
+```sh
+conda env export --no-builds > environment-linux.yml
+```
+
 ## How to Run this Application
 
 To run this application by executing the following command:
