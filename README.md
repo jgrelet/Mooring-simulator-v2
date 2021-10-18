@@ -22,7 +22,7 @@ conda env create -f environment<OS>.yml -n <new_env_name>
 example:
 
 ``` bash
-conda env create -f environment-windows.yml -n oceano2python
+conda env create -f environment-windows.yml -n ms2
 ```
 
 ## Installation from scratch
