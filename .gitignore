@@ -159,6 +159,5 @@ library/*.json
 
 # YAML
 *.yml
-!environment-windows.yml
-!environment-linux.yml
+!environment-*.yml
 
