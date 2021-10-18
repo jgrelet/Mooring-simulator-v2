@@ -4,7 +4,19 @@ See the [roadmap](https://github.com/users/jgrelet/projects/1).
 
 A redesign of the GUI Mooring Simulator application based on [python-menus-toolbar](https://realpython.com/python-menus-toolbars/) that shows how to create and use menus, toolbars, and status bars using Python and PyQt.
 
-## Prerequisites
+## Installation based on an YAML environment file
+
+``` bash
+conda env create -f environment<OS>.yml -n <new_env_name>
+```
+
+example:
+
+``` bash
+conda env create -f environment-windows.yml -n oceano2python
+```
+
+## Installation from scratch
 
 We will use VSC as a development tool with conda and python 3.8
 
