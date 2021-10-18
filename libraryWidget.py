@@ -46,7 +46,7 @@ class LibraryWidget(QWidget):
         self.library = self.read()
 
         # Initialize tab screen
-        self.tabWidget = QTabWidget()
+        #self.tabWidget = QTabWidget()
         self.libraryArea = self.display()
         self.libraryLayout.addWidget(self.libraryArea)
         self.setLayout(self.libraryLayout)
