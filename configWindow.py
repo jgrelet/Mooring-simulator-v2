@@ -7,6 +7,7 @@ from os import path, makedirs
 from pathlib import Path
 import toml
 import logging
+from appdirs import AppDirs
 from version import NAME
 
 
@@ -14,18 +15,20 @@ class ConfigWindow(QWidget):
     ''' This class display configuration window, and save in toml file
     '''
 
-    def __init__(self, pathName, appName, version):
+    def __init__(self, appName, version):
         super(QWidget, self).__init__()
 
         # private properties
         self.__logger = logging.getLogger(NAME)
         self.__version = version
         # setup toml configuration file, may be move in init function.
-        self.__configPath = path.expandvars(f"$APPDATA/{pathName}")
+        #self.__configPath = path.expandvars(f"$APPDATA/{pathName}")
+        dirs = AppDirs(appName)
+        self.__configPath = dirs.user_config_dir
         if not path.exists(self.__configPath):
             makedirs(self.__configPath)
         self.__configFile = Path(path.expandvars(
-            f"{self.__configPath}/{appName}")).with_suffix('.toml')
+            f"{self.__configPath}")).with_suffix('.toml')
         if not path.isfile(self.__configFile):
             self.saveDefaultConfig()
         self.__cfg = toml.load(self.__configFile)
@@ -51,6 +54,7 @@ class ConfigWindow(QWidget):
 
     def __str__(self):
         str = f"\n\
+        User config dir = {self.__configFile}\n\
         Window size = {self.__cfg['global']['screenWidth']} x {self.__cfg['global']['screenHeight']}\n\
         Reference = {self.__cfg['config']['reference']} \n\
         Bottom depth = {self.__cfg['config']['bottomDepth']} \n\
@@ -153,7 +157,7 @@ if __name__ == "__main__":
     # remove path and file extention, get only the filename
     appName = Path(__file__).with_suffix('').stem
 
-    cfg = ConfigWindow(appName, appName, "1.03")
+    cfg = ConfigWindow(appName, "1.03")
     cfg.displayGlobalConfig()
     cfg.show()
 

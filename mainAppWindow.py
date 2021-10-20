@@ -54,7 +54,7 @@ class MainAppWindow(QMainWindow, QObject):
         self.setWindowTitle(f"{NAME} v{VERSION}")
 
         # we use same name for directory and toml configuration file
-        self.cfg = ConfigWindow(NAME, APPNAME, VERSION)
+        self.cfg = ConfigWindow(APPNAME, VERSION)
         self.resize(self.cfg['global']['screenWidth'],
                     self.cfg['global']['screenHeight'])
         self.fileName = file_name
