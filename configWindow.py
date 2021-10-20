@@ -8,7 +8,7 @@ from pathlib import Path
 import toml
 import logging
 from appdirs import AppDirs
-from version import NAME
+from version import NAME, AUTHOR
 
 
 class ConfigWindow(QWidget):
@@ -21,20 +21,20 @@ class ConfigWindow(QWidget):
         # private properties
         self.__logger = logging.getLogger(NAME)
         self.__version = version
+        
         # setup toml configuration file, may be move in init function.
-        #self.__configPath = path.expandvars(f"$APPDATA/{pathName}")
-        dirs = AppDirs(appName)
-        self.__configPath = dirs.user_config_dir
-        if not path.exists(self.__configPath):
-            makedirs(self.__configPath)
-        self.__configFile = Path(path.expandvars(
-            f"{self.__configPath}")).with_suffix('.toml')
-        if not path.isfile(self.__configFile):
+        self.__config_dir = AppDirs(appName, AUTHOR).user_data_dir
+        print(self.__config_dir)
+        if not path.exists(self.__config_dir):
+            makedirs(self.__config_dir)
+        self.__config_file = Path(path.expandvars(
+            f"{self.__config_dir}/{appName}")).with_suffix('.toml')
+        if not path.isfile(self.__config_file):
             self.saveDefaultConfig()
-        self.__cfg = toml.load(self.__configFile)
+        self.__cfg = toml.load(self.__config_file)
         if not "version" in self.__cfg or self.__cfg["version"] != self.__version:
             self.saveDefaultConfig()
-            self.__cfg = toml.load(self.__configFile)
+            self.__cfg = toml.load(self.__config_file)
 
         # Lock the window to a fixed size. In Qt sizes are defined using a QSize object.
         # This accepts width and height parameters in that order
@@ -54,7 +54,7 @@ class ConfigWindow(QWidget):
 
     def __str__(self):
         str = f"\n\
-        User config dir = {self.__configFile}\n\
+        User config dir = {self.__config_file}\n\
         Window size = {self.__cfg['global']['screenWidth']} x {self.__cfg['global']['screenHeight']}\n\
         Reference = {self.__cfg['config']['reference']} \n\
         Bottom depth = {self.__cfg['config']['bottomDepth']} \n\
@@ -115,13 +115,13 @@ class ConfigWindow(QWidget):
 
     # Save current config
     def saveConfig(self):
-        with open(self.__configFile, 'w') as fid:
+        with open(self.__config_file, 'w') as fid:
             toml.dump(self.__cfg, fid)
 
     def saveDefaultConfig(self):
         self.__logger.info(
-            f"Configuration file don't exist, create one from default config to {self.__configFile}")
-        with open(self.__configFile, 'w') as fid:
+            f"Configuration file don't exist, create one from default config to {self.__config_file}")
+        with open(self.__config_file, 'w') as fid:
             self.__cfg = ConfigWindow.getDefaultConfig()
             self.__cfg['version'] = self.__version
             toml.dump(self.__cfg, fid)
