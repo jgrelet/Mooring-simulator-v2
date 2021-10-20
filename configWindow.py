@@ -22,7 +22,8 @@ class ConfigWindow(QWidget):
         self.__logger = logging.getLogger(NAME)
         self.__version = version
 
-        # setup toml configuration file, may be move in init function.
+        # setup toml configuration file, see:
+        # https://github.com/ActiveState/appdirs/blob/master/appdirs.py
         self.__config_dir = AppDirs(appName, AUTHOR).user_config_dir
         if not path.exists(self.__config_dir):
             makedirs(self.__config_dir)
