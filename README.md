@@ -53,7 +53,12 @@ conda env update --prefix ./ms2 --file environment-linux.yml --prune
 
 ## Linux and wsl specificities
 
-If you get the following error message when running the program, it is necessary to reinstall the following program 
+If you get the following error message when running the program:
+
+*qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
+This application failed to start because no Qt platform plugin could be initialized. Reinstalling the application may fix this problem.*
+
+it is necessary to reinstall the following program:
 
 ```sh
 sudo apt-get install --reinstall libxcb-xinerama0
