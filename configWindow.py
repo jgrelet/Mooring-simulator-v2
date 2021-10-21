@@ -9,6 +9,7 @@ import toml
 import logging
 from appdirs import AppDirs
 from version import NAME, AUTHOR
+from logger import configure_logger
 
 
 class ConfigWindow(QWidget):
@@ -22,7 +23,8 @@ class ConfigWindow(QWidget):
         self.__logger = logging.getLogger(NAME)
         self.__version = version
 
-        # setup toml configuration file, may be move in init function.
+        # setup toml configuration file, see:
+        # https://github.com/ActiveState/appdirs/blob/master/appdirs.py
         self.__config_dir = AppDirs(appName, AUTHOR).user_config_dir
         if not path.exists(self.__config_dir):
             makedirs(self.__config_dir)
@@ -149,6 +151,8 @@ class ConfigWindow(QWidget):
 # for testing in standalone context
 # ---------------------------------
 if __name__ == "__main__":
+
+    logger = configure_logger('DEBUG')
 
     # Create the application
     app = QApplication([])
