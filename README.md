@@ -45,6 +45,12 @@ Duplicate your environment on other computer or OS, just export it to a YAML fil
 conda env export --no-builds > environment-linux.yml
 ```
 
+## Update the environment
+
+```sh
+conda env update --prefix ./ms2 --file environment-linux.yml --prune
+```
+
 ## How to Run this Application
 
 To run this application by executing the following command:
