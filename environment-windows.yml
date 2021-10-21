@@ -1,12 +1,15 @@
 name: ms2
 channels:
+  - conda-forge
   - defaults
 dependencies:
-  - ca-certificates=2021.5.25
-  - certifi=2021.5.30
-  - openssl=1.1.1k
+  - appdirs=1.4.4
+  - ca-certificates=2021.10.8
+  - certifi=2021.10.8
+  - openssl=1.1.1l
   - pip=21.1.1
   - python=3.8.10
+  - python_abi=3.8
   - setuptools=52.0.0
   - sqlite=3.35.4
   - toml=0.10.2
