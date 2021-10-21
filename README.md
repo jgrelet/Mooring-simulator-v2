@@ -51,6 +51,14 @@ conda env export --no-builds > environment-linux.yml
 conda env update --prefix ./ms2 --file environment-linux.yml --prune
 ```
 
+## Linux and wsl specificities
+
+If you get the following error message when running the program, it is necessary to reinstall the following program 
+
+```sh
+sudo apt-get install --reinstall libxcb-xinerama0
+```
+
 ## How to Run this Application
 
 To run this application by executing the following command:
