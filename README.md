@@ -51,6 +51,12 @@ conda env export --no-builds > environment-linux.yml
 conda env update --prefix ./ms2 --file environment-linux.yml --prune
 ```
 
+## Remove an environment
+
+```sh
+conda env remove --name <env>
+```
+
 ## Linux and wsl specificities
 
 If you get the following error message when running the program:
