@@ -9,6 +9,7 @@ import toml
 import logging
 from appdirs import AppDirs
 from version import NAME, AUTHOR
+from logger import configure_logger
 
 
 class ConfigWindow(QWidget):
@@ -150,6 +151,8 @@ class ConfigWindow(QWidget):
 # for testing in standalone context
 # ---------------------------------
 if __name__ == "__main__":
+
+    logger = configure_logger('DEBUG')
 
     # Create the application
     app = QApplication([])
