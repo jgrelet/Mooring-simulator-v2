@@ -26,7 +26,7 @@ from constants import STYLE_SPREADSHEET_TEXT
 from version import NAME
 
 
-class LibraryWidget(QtWidgets.QWidget):
+class LibraryWidget(QtWidgets.QTabWidget):
     """This class display a library in a table panel.
     """
 
@@ -36,7 +36,7 @@ class LibraryWidget(QtWidgets.QWidget):
         Args:
             filename (string): The Excel .xls library file
         """
-        super(QtWidgets.QWidget, self).__init__()
+        super(QtWidgets.QTabWidget, self).__init__()
 
         self.__logger = logging.getLogger(NAME)
 
@@ -47,7 +47,8 @@ class LibraryWidget(QtWidgets.QWidget):
         self.library = self.read()
 
         # Initialize tab screen
-        self.tabWidget = QtWidgets.QTabWidget()
+        #self.tabWidget = QtWidgets.QTabWidget()
+        #self.libraryArea = self.display()
         self.libraryArea = self.display()
         self.libraryLayout.addWidget(self.libraryArea)
         self.setLayout(self.libraryLayout)
@@ -68,15 +69,17 @@ class LibraryWidget(QtWidgets.QWidget):
         Returns:
             QtWidgets.QMdiArea: an instance of a QtWidgets.QMdiArea object
         """
-        libraryArea = QtWidgets.QMdiArea(self)
+        #libraryArea = QtWidgets.QMdiArea(self)
         library = self.library.toDict()
         for worksheet in self.library.worksheets:
             libraryWidget = QtWidgets.QWidget()
-            cate = libraryArea.addSubWindow(libraryWidget)
-            cate.setWindowTitle(worksheet)
-            cate.setWindowIcon(QtGui.QIcon('exit24.png'))
+            self.addTab(libraryWidget, worksheet)
+            #cate = libraryArea.addSubWindow(libraryWidget)
+            #cate.setWindowTitle(worksheet)
+            #cate.setWindowIcon(QtGui.QIcon('exit24.png'))
             # display each subwindows with tab layout
-            libraryArea.setViewMode(QtWidgets.QMdiArea.ViewMode.SubWindowView)
+            #libraryArea.setViewMode(QtWidgets.QMdiArea.ViewMode.SubWindowView)
+            
             groupLayout = QtWidgets.QVBoxLayout()
             scrollArea = QtWidgets.QScrollArea()
             groupLayout.addWidget(scrollArea)
@@ -105,6 +108,8 @@ class LibraryWidget(QtWidgets.QWidget):
                     grid.addWidget(label, 1+ind_row, col)
             grid.setSpacing(0)
             scrollArea.setWidget(scrolledWidget)
+           
             libraryWidget.setLayout(groupLayout)
 
-        return libraryArea
+        #return libraryArea
+        return libraryWidget
