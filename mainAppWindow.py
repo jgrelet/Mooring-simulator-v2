@@ -15,10 +15,10 @@ from functools import partial
 from math import floor
 from pathlib import Path
 
-from PyQt5.QtCore import Qt, QObject, pyqtSignal
-from PyQt5.QtGui import QIcon, QKeySequence
-from PyQt5.QtWidgets import (
-    QAction,
+from PyQt6 import QtCore # Qt, QObject, Signal
+from PyQt6 import QtGui # QIcon, QKeySequence, QAction
+from PyQt6 import QtWidgets
+""""
     QLabel,
     QMainWindow,
     QMenu,
@@ -26,7 +26,7 @@ from PyQt5.QtWidgets import (
     QStyle,
     QFileDialog,
     QDockWidget,
-)
+)"""
 
 from libraryWidget import LibraryWidget
 from configWindow import ConfigWindow
@@ -34,16 +34,16 @@ from version import NAME, APPNAME, VERSION
 import qrc_resources
 
 
-class MainAppWindow(QMainWindow, QObject):
+class MainAppWindow(QtWidgets.QMainWindow):
     """Main window of the Mooring Simulator application
-    The MainWindows class inherits from QMainWindow which is a prefabricated widget providing
+    The MainWindows class inherits from QtWidgets.QMainWindow which is a prefabricated widget providing
     many standard window features that are used in the application, including toolbars, menus, a status bar and more,
     menus, status bar, dockable widgets and more
     """
 
     # defined a signal named trigger as class attribute, used to display info on status bar
     # experimental...
-    trigger = pyqtSignal()
+    trigger = QtCore.pyqtSignal()
 
     def __init__(self, library_file_name='', file_name=''):
         """In the class initializer .__init__(), you first call the parent class
@@ -64,9 +64,13 @@ class MainAppWindow(QMainWindow, QObject):
         # messages in response to certain user actions. These messages will display
         # at the center of the window. To do this, you call .setAlignment() on the
         # QLabel object with a couple of alignment flags.
-        self.centralWidget = QLabel(
+        self.centralWidget = QtWidgets.QLabel(
             f"Hello, welcome inside {NAME}, enjoy!")
-        self.centralWidget.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        # PyQt5
+        self.centralWidget.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter | 
+            QtCore.Qt.AlignmentFlag.AlignVCenter)
+        # PySide6
+        #self.centralWidget.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
         self.setCentralWidget(self.centralWidget)
 
         # Note that you call ._createActions() before you call ._createMenuBar() and
@@ -110,7 +114,7 @@ class MainAppWindow(QMainWindow, QObject):
         # the menu option.
 
         # Creating menus using a QMenu object
-        fileMenu = QMenu("&File", self)
+        fileMenu = QtWidgets.QMenu("&File", self)
         menuBar.addMenu(fileMenu)
         fileMenu.addAction(self.newAction)
         fileMenu.addAction(self.openAction)
@@ -177,9 +181,9 @@ class MainAppWindow(QMainWindow, QObject):
         fileToolBar.addAction(self.saveAction)
 
         # Create Edit toolbar using a QToolBar object
-        self.editToolBar = QToolBar("Edit", self)
+        self.editToolBar = QtWidgets.QToolBar("Edit", self)
         # inserts a QToolBar object (toolbar) into the specified toolbar area (area).
-        # self.addToolBar(Qt.LeftToolBarArea, editToolBar)
+        # self.addToolBar(QtCore.Qt.LeftToolBarArea, editToolBar)
         self.addToolBar(self.editToolBar)
         self.editToolBar.addAction(self.copyAction)
         self.editToolBar.addAction(self.pasteAction)
@@ -189,7 +193,7 @@ class MainAppWindow(QMainWindow, QObject):
         self.editToolBar.setDisabled(True)
 
         # Library toolbar
-        libraryToolBar = QToolBar("Edit", self)
+        libraryToolBar = QtWidgets.QToolBar("Edit", self)
         self.addToolBar(libraryToolBar)
         libraryToolBar.addAction(self.showLibraryAction)
         libraryToolBar.addAction(self.loadLibraryAction)
@@ -200,7 +204,7 @@ class MainAppWindow(QMainWindow, QObject):
         # First import the spin box class. Then create a QSpinBox object, set its
         # focusPolicy to Qt.NoFocus, and finally add it to the library toolbar.
         # self.fontSizeSpinBox = QSpinBox()
-        # self.fontSizeSpinBox.setFocusPolicy(Qt.NoFocus)
+        # self.fontSizeSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
         # libraryToolBar.addWidget(self.fontSizeSpinBox)
 
     def _createStatusBar(self):
@@ -208,24 +212,22 @@ class MainAppWindow(QMainWindow, QObject):
         # Temporary message
         self.statusbar.showMessage("Ready", 3000)
         # Permanent widget
-        self.wcLabel = QLabel(f"{self.getWordCount()} Words")
+        self.wcLabel = QtWidgets.QLabel(f"{self.getWordCount()} Words")
         self.statusbar.addPermanentWidget(self.wcLabel)
 
     def _createActions(self):
         # File actions
-        self.newAction = QAction(self)
+        self.newAction = QtGui.QAction(self)
         self.newAction.setText("&New mooring")
-        self.newAction.setIcon(QIcon(self.style().standardIcon(getattr(QStyle,
-                                                                       "SP_FileDialogNewFolder"))))
-        self.openAction = QAction(
-            QIcon(self.style().standardIcon(
-                getattr(QStyle, "SP_DialogOpenButton"))),
+        self.newAction.setIcon(QtGui.QIcon(self.style().standardIcon(
+            QtWidgets.QStyle.StandardPixmap.SP_FileDialogNewFolder)))
+        self.openAction = QtGui.QAction(QtGui.QIcon(self.style().standardIcon(
+            QtWidgets.QStyle.StandardPixmap.SP_DialogOpenButton)),
             "&Open mooring", self)
-        self.saveAction = QAction(
-            QIcon(self.style().standardIcon(
-                getattr(QStyle, "SP_DialogSaveButton"))),
+        self.saveAction = QtGui.QAction(QtGui.QIcon(self.style().standardIcon(
+            QtWidgets.QStyle.StandardPixmap.SP_DialogSaveButton)),
             "&Save mooring", self)
-        self.exitAction = QAction("&Exit", self)
+        self.exitAction = QtGui.QAction("&Exit", self)
         # String-based key sequences
         self.newAction.setShortcut("Ctrl+N")
         self.openAction.setShortcut("Ctrl+O")
@@ -237,54 +239,54 @@ class MainAppWindow(QMainWindow, QObject):
         self.newAction.setWhatsThis("Create a new and empty mooring")
 
         # Edit actions
-        self.copyAction = QAction(QIcon(":edit-copy.png"), "&Copy", self)
-        self.pasteAction = QAction(QIcon(":edit-paste.png"), "&Paste", self)
-        self.cutAction = QAction(QIcon(":edit-cut.png"), "C&ut", self)
-        self.zoomInAction = QAction(QIcon(":zoom-in.png"), "Zoom in", self)
-        self.zoomOutAction = QAction(QIcon(":zoom-out.png"), "Zoom out", self)
+        self.copyAction = QtGui.QAction(QtGui.QIcon(":edit-copy.png"), "&Copy", self)
+        self.pasteAction = QtGui.QAction(QtGui.QIcon(":edit-paste.png"), "&Paste", self)
+        self.cutAction = QtGui.QAction(QtGui.QIcon(":edit-cut.png"), "C&ut", self)
+        self.zoomInAction = QtGui.QAction(QtGui.QIcon(":zoom-in.png"), "Zoom in", self)
+        self.zoomOutAction = QtGui.QAction(QtGui.QIcon(":zoom-out.png"), "Zoom out", self)
         # Standard key sequence
-        self.copyAction.setShortcut(QKeySequence.Copy)
-        self.pasteAction.setShortcut(QKeySequence.Paste)
-        self.cutAction.setShortcut(QKeySequence.Cut)
+        self.copyAction.setShortcut(QtGui.QKeySequence.StandardKey.Copy)
+        self.pasteAction.setShortcut(QtGui.QKeySequence.StandardKey.Paste)
+        self.cutAction.setShortcut(QtGui.QKeySequence.StandardKey.Cut)
 
         # Library actions
-        self.showLibraryAction = QAction(
-            QIcon(":library-show.png"), "&Show library", self)
-        self.loadLibraryAction = QAction(
-            QIcon(":library-load-2.png"), "&Load new library", self)
-        self.refreshLibraryAction = QAction(
-            QIcon(":refresh.png"), "&Refresh library", self)
-        self.openExcelLibraryAction = QAction(
-            QIcon(":spreadsheet.png"), "&Open Excel library", self)
+        self.showLibraryAction = QtGui.QAction(
+            QtGui.QIcon(":library-show.png"), "&Show library", self)
+        self.loadLibraryAction = QtGui.QAction(
+            QtGui.QIcon(":library-load-2.png"), "&Load new library", self)
+        self.refreshLibraryAction = QtGui.QAction(
+            QtGui.QIcon(":refresh.png"), "&Refresh library", self)
+        self.openExcelLibraryAction = QtGui.QAction(
+            QtGui.QIcon(":spreadsheet.png"), "&Open Excel library", self)
         # Standard key sequence
-        # self.showLibraryAction.setShortcut(QKeySequence.Copy)
-        # self.loadLibraryAction.setShortcut(QKeySequence.Paste)
+        # self.showLibraryAction.setShortcut(QtGui.QKeySequence.StandardKey.Copy)
+        # self.loadLibraryAction.setShortcut(QtGui.QKeySequence.StandardKey.Paste)
 
         # Configuration actions
-        self.globalConfigurationAction = QAction(
+        self.globalConfigurationAction = QtGui.QAction(
             "Set global configuration", self)
-        self.setenvConfigurationAction = QAction(
+        self.setenvConfigurationAction = QtGui.QAction(
             "Set environnemental conditions", self, checkable=True)
 
         # Simulate actions
-        self.startSimulateAction = QAction(
-            QIcon(":play.png"), "Start simulation", self)
-        self.generateReportAction = QAction("Generate report", self)
+        self.startSimulateAction = QtGui.QAction(
+            QtGui.QIcon(":play.png"), "Start simulation", self)
+        self.generateReportAction = QtGui.QAction("Generate report", self)
 
         # Help actions
-        self.helpContentAction = QAction("&Help Content...", self)
-        self.aboutAction = QAction("&About...", self)
+        self.helpContentAction = QtGui.QAction("&Help Content...", self)
+        self.aboutAction = QtGui.QAction("&About...", self)
 
         # Status bar actions
         # not well implemented
-        # self.centralWidgetAction = QAction(self.centralWidget)
+        # self.centralWidgetAction = QtGui.QAction(self.centralWidget)
         # self.centralWidget.addAction(self.centralWidgetAction)
         self.trigger.connect(self.handle_trigger)
 
     # Uncomment this method to create a context menu using menu policies
     # def _createContextMenu(self):
     #     # Setting contextMenuPolicy
-    #     self.centralWidget.setContextMenuPolicy(Qt.ActionsContextMenu)
+    #     self.centralWidget.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
     #     # Populating the widget with actions
     #     self.centralWidget.addAction(self.newAction)
     #     self.centralWidget.addAction(self.openAction)
@@ -295,13 +297,13 @@ class MainAppWindow(QMainWindow, QObject):
 
     def contextMenuEvent(self, event):
         # Context menu
-        menu = QMenu(self.centralWidget)
+        menu = QtWidgets.QMenu(self.centralWidget)
         # Populating the menu with actions
         menu.addAction(self.newAction)
         menu.addAction(self.openAction)
         menu.addAction(self.saveAction)
         # Separator
-        separator = QAction(self)
+        separator = QtGui.QAction(self)
         separator.setSeparator(True)
         menu.addAction(separator)
         menu.addAction(self.showLibrary)
@@ -404,7 +406,7 @@ class MainAppWindow(QMainWindow, QObject):
     def pickLibrary(self):
         # Logic for pasting content goes here...
         # self.libraryDockWidget.hide()
-        (self.libraryFileName, _) = QFileDialog.getOpenFileName(
+        (self.libraryFileName, _) = QtWidgets.QFileDialog.getOpenFileName(
             self, ("Open File"), "Library", ("Spreadsheet  (*.xls)"))
         self.loadLibrary()
 
@@ -414,12 +416,12 @@ class MainAppWindow(QMainWindow, QObject):
         self.library.setMinimumWidth(
             floor(self.cfg['global']['screenWidth']/2))
         self.library.setMinimumHeight(200)
-        self.libraryDockWidget = QDockWidget()
+        self.libraryDockWidget = QtWidgets.QDockWidget('Library')
         self.libraryDockWidget.setWidget(self.library)
-        #Ajoute la bibliotheque dans le DockWidget en position haute#
-        self.addDockWidget(Qt.TopDockWidgetArea,
+        # Ajoute la bibliotheque dans le DockWidget en position haute#
+        self.addDockWidget(QtCore.Qt.DockWidgetArea.TopDockWidgetArea,
                            self.libraryDockWidget)
-        self.libraryDockWidget.setWindowTitle('Library')
+        # self.libraryDockWidget.setWindowTitle('Library')
         # send a signal to statusbar for testing only
         self.trigger.emit()
 
@@ -477,7 +479,7 @@ class MainAppWindow(QMainWindow, QObject):
         actions = []
         filenames = [f"File-{n}" for n in range(5)]
         for filename in filenames:
-            action = QAction(filename, self)
+            action = QtGui.QAction(filename, self)
             action.triggered.connect(partial(self.openRecentFile, filename))
             actions.append(action)
         # Step 3. Add the actions to the menu

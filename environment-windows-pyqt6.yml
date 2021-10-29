@@ -1,0 +1,38 @@
+name: Qt6
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - appdirs=1.4.4
+  - ca-certificates=2021.10.8
+  - certifi=2021.10.8
+  - openssl=1.1.1l
+  - pip=21.1.2
+  - python=3.9.4
+  - python_abi=3.9
+  - setuptools=49.6.0
+  - sqlite=3.35.5
+  - toml=0.10.2
+  - tzdata=2021a
+  - vc=14.2
+  - vs2015_runtime=14.28.29325
+  - wheel=0.36.2
+  - wincertstore=0.2
+  - xlrd=2.0.1
+  - pip:
+    - click==7.1.2
+    - cx-freeze==6.6
+    - cx-logging==3.0
+    - importlib-metadata==4.1.0
+    - pyqt6==6.1.0
+    - pyqt6-plugins==6.1.0.2.2
+    - pyqt6-qt6==6.1.0
+    - pyqt6-sip==13.1.0
+    - pyqt6-tools==6.1.0.3.2
+    - pyside6==6.1.0
+    - python-dotenv==0.17.1
+    - qt6-applications==6.1.0.2.2
+    - qt6-tools==6.1.0.1.2
+    - shiboken6==6.1.0
+    - zipp==3.4.1
+prefix: C:\Users\jgrelet\miniconda3\envs\Qt6

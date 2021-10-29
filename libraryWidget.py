@@ -9,8 +9,9 @@
 """A class that allows to display a library of components in table panel."""
 
 import logging
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import (
+from PyQt6 import QtGui # QIcon
+from PyQt6 import QtWidgets
+"""(
     QWidget,
     QTabWidget,
     QVBoxLayout,
@@ -18,14 +19,14 @@ from PyQt5.QtWidgets import (
     QMdiArea,
     QScrollArea,
     QGridLayout,
-)
+)"""
 
 from excel2json import excel2json
 from constants import STYLE_SPREADSHEET_TEXT
 from version import NAME
 
 
-class LibraryWidget(QWidget):
+class LibraryWidget(QtWidgets.QWidget):
     """This class display a library in a table panel.
     """
 
@@ -35,18 +36,18 @@ class LibraryWidget(QWidget):
         Args:
             filename (string): The Excel .xls library file
         """
-        super(QWidget, self).__init__()
+        super(QtWidgets.QWidget, self).__init__()
 
         self.__logger = logging.getLogger(NAME)
 
         self.fileName = filename
-        self.libraryLayout = QVBoxLayout(self)
+        self.libraryLayout = QtWidgets.QVBoxLayout(self)
 
         # convert Excel to JSON to python dict
         self.library = self.read()
 
         # Initialize tab screen
-        #self.tabWidget = QTabWidget()
+        self.tabWidget = QtWidgets.QTabWidget()
         self.libraryArea = self.display()
         self.libraryLayout.addWidget(self.libraryArea)
         self.setLayout(self.libraryLayout)
@@ -65,26 +66,26 @@ class LibraryWidget(QWidget):
         """Display library inside MDI window in table panel
 
         Returns:
-            QMdiArea: an instance of a QMdiArea object
+            QtWidgets.QMdiArea: an instance of a QtWidgets.QMdiArea object
         """
-        libraryArea = QMdiArea(self)
+        libraryArea = QtWidgets.QMdiArea(self)
         library = self.library.toDict()
         for worksheet in self.library.worksheets:
-            libraryWidget = QWidget()
+            libraryWidget = QtWidgets.QWidget()
             cate = libraryArea.addSubWindow(libraryWidget)
             cate.setWindowTitle(worksheet)
-            cate.setWindowIcon(QIcon('exit24.png'))
+            cate.setWindowIcon(QtGui.QIcon('exit24.png'))
             # display each subwindows with tab layout
-            libraryArea.setViewMode(1)
-            groupLayout = QVBoxLayout()
-            scrollArea = QScrollArea()
+            libraryArea.setViewMode(QtWidgets.QMdiArea.ViewMode.SubWindowView)
+            groupLayout = QtWidgets.QVBoxLayout()
+            scrollArea = QtWidgets.QScrollArea()
             groupLayout.addWidget(scrollArea)
-            scrolledWidget = QWidget()
+            scrolledWidget = QtWidgets.QWidget()
             # display the first layout grid with desciption (names) of each column
-            grid = QGridLayout(scrolledWidget)
+            grid = QtWidgets.QGridLayout(scrolledWidget)
             names = list(library[worksheet]['1'].keys())
             for col, name in enumerate(names):
-                label = QLabel(name)
+                label = QtWidgets.QLabel(name)
                 label.setStyleSheet(STYLE_SPREADSHEET_TEXT)
                 grid.addWidget(label, 0, col)
             # for each row
@@ -95,7 +96,7 @@ class LibraryWidget(QWidget):
                 for col, name in enumerate(columns):
                     self.__logger.debug(
                         f"col: {col}, {type(col)},name: {name}, {type(name)}")
-                    label = QLabel(str(library[worksheet][row][name]))
+                    label = QtWidgets.QLabel(str(library[worksheet][row][name]))
                     color = 'black' if col else 'red'
                     if not ind_row:
                         color = 'green'

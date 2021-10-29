@@ -12,8 +12,8 @@ import sys
 from os import path
 from pathlib import Path
 import argparse
-from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtWidgets import QApplication
+from PyQt6 import QtGui # QIcon, QPixmap
+from PyQt6 import QtWidgets # QApplication
 
 from logger import configure_logger
 from mainAppWindow import MainAppWindow
@@ -53,7 +53,7 @@ if __name__ == "__main__":
     """
 
     # Create the application handler
-    app = QApplication([])
+    app = QtWidgets.QApplication([])
 
     appName = Path(__file__).with_suffix('').stem
 
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     app.setStyle("Fusion")
 
     # Setting the Application Icon on Windows
-    app.setWindowIcon(QIcon(":windows-main.ico"))
+    app.setWindowIcon(QtGui.QIcon(":windows-main.ico"))
 
     # Set application window size, 800 x 600 by default
     if len(args.size) == 1:
@@ -112,7 +112,7 @@ if __name__ == "__main__":
     # splash.finish(mainAppWindow)
 
     # Run the event loop
-    ret = app.exec_()
+    ret = app.exec()
 
     # GetmainWindow. the main windows size and update configuration for next use
     #mainAppWindow.cfg['global']['screenWidth'] = mainAppWindow.frameGeometry().width()

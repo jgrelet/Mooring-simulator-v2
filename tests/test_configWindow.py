@@ -3,10 +3,10 @@
 
 import unittest
 import sys
-from PyQt5.QtTest import QTest
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication
-from PyQt5.QtWidgets import QWidget
+from PyQt6.QtTest import QTest
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QApplication
+from PyQt6.QtWidgets import QWidget
 
 from configWindow import ConfigWindow
 
@@ -53,7 +53,7 @@ class testConfigWindow(unittest.TestCase):
 
     def setUp(self):
         """ Create and initialize to default the GUI"""
-        self.form = ConfigWindow("MooringSimulator", "ConfigWindow", "1.0")
+        self.form = ConfigWindow("ConfigWindow", "1.0")
         # restore the toml file to default config
         self.form.saveDefaultConfig()
         self.form.displayGlobalConfig()
@@ -126,8 +126,8 @@ class testConfigWindow(unittest.TestCase):
         # self.clearForm()
         QTest.keyClicks(self.form.screenWidth, "1024")
         # Push OK with the left mouse button
-        okWidget = self.form.btnBox.button(self.form.btnBox.Ok)
-        QTest.mouseClick(okWidget, Qt.LeftButton)
+        okWidget = self.form.btnBox.button(self.form.btnBox.StandardButton.Ok)
+        QTest.mouseClick(okWidget, Qt.MouseButton.LeftButton)
         self.assertEqual(int(self.form.screenWidth.text()), 1024)
 
     def test_screenHeightLineEdit(self):
@@ -136,21 +136,21 @@ class testConfigWindow(unittest.TestCase):
         # self.clearForm()
         QTest.keyClicks(self.form.screenHeight, "768")
         # Push OK with the left mouse button
-        okWidget = self.form.btnBox.button(self.form.btnBox.Ok)
-        QTest.mouseClick(okWidget, Qt.LeftButton)
+        okWidget = self.form.btnBox.button(self.form.btnBox.StandardButton.Ok)
+        QTest.mouseClick(okWidget, Qt.MouseButton.LeftButton)
         self.assertEqual(int(self.form.screenHeight.text()), 768)
 
     def test_referenceLineEdit(self):
         ''' Test the reference line edit '''
         # select into the reference comboBox widget
         # self.clearForm()
-        QTest.keyClick(self.form.reference, Qt.Key_Down)
+        QTest.keyClick(self.form.reference, Qt.Key.Key_Down)
         self.assertEqual(self.form.reference.currentText(), "bottom")
-        QTest.keyClick(self.form.reference, Qt.Key_Down)
+        QTest.keyClick(self.form.reference, Qt.Key.Key_Down)
         #self.assertEqual(self.form.reference.currentText(), "surface")
         # Push OK with the left mouse button
-        okWidget = self.form.btnBox.button(self.form.btnBox.Ok)
-        QTest.mouseClick(okWidget, Qt.LeftButton)
+        okWidget = self.form.btnBox.button(self.form.btnBox.StandardButton.Ok)
+        QTest.mouseClick(okWidget, Qt.MouseButton.LeftButton)
 
     def test_bottomDepthLineEdit(self):
         ''' Test the bottom depth line edit '''
@@ -158,8 +158,8 @@ class testConfigWindow(unittest.TestCase):
         # self.clearForm()
         QTest.keyClicks(self.form.bottomDepth, "4500")
         # Push OK with the left mouse button
-        okWidget = self.form.btnBox.button(self.form.btnBox.Ok)
-        QTest.mouseClick(okWidget, Qt.LeftButton)
+        okWidget = self.form.btnBox.button(self.form.btnBox.StandardButton.Ok)
+        QTest.mouseClick(okWidget, Qt.MouseButton.LeftButton)
         self.assertEqual(int(self.form.bottomDepth.text()), 4500)
 
 
