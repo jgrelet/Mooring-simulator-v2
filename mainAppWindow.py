@@ -30,7 +30,7 @@ from PyQt6 import QtWidgets
 
 from libraryWidget import LibraryWidget
 from configWindow import ConfigWindow
-from version import NAME, APPNAME, VERSION
+from version import NAME, APPNAME, QT, VERSION
 import qrc_resources
 
 
@@ -51,7 +51,7 @@ class MainAppWindow(QtWidgets.QMainWindow):
         using .setWindowTitle() and resize the window using .resize()
         """
         super(MainAppWindow, self).__init__()
-        self.setWindowTitle(f"{NAME} v{VERSION}")
+        self.setWindowTitle(f"{NAME} v{VERSION} ({QT})")
 
         # we use same name for directory and toml configuration file
         self.cfg = ConfigWindow(APPNAME, VERSION)

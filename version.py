@@ -1,4 +1,5 @@
 VERSION = "2.0.0.2"
+QT = "PyQt6"
 NAME    = "Mooring Simulator"
 APPNAME = "mooringSimulator"
 AUTHOR = "IRD"
