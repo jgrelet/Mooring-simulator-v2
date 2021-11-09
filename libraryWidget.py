@@ -27,7 +27,7 @@ from version import NAME
 
 
 class LibraryWidget(QtWidgets.QTabWidget):
-    """This class display a library in a table panel.
+    """This class display a library in a tab panel.
     """
 
     def __init__(self, filename):
