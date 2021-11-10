@@ -25,6 +25,18 @@ from excel2json import excel2json
 from constants import STYLE_SPREADSHEET_TEXT
 from version import NAME
 
+# https://www.it-swarm-fr.com/fr/python/effacer-tous-les-widgets-dune-presentation-dans-pyqt/970161235/
+def clearLayout(layout):
+    """ Adapted from Qt documentation http://doc.qt.io/qt-5/qlayout.html#takeAt.
+    Remember that when you delete children from the layout in a while or for loop, 
+    you are effectively changing the index # of each child element in the layout. 
+    This is why you will run into problems when using a for i in range() loop.
+    """
+    while layout.count():
+        child = layout.takeAt(0)
+        if child.widget():
+            child.widget().deleteLater()
+
 
 class LibraryWidget(QtWidgets.QTabWidget):
     """This class display a library in a table panel.
@@ -113,3 +125,5 @@ class LibraryWidget(QtWidgets.QTabWidget):
 
         #return libraryArea
         return libraryWidget
+
+        

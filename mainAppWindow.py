@@ -28,7 +28,7 @@ from PyQt6 import QtWidgets
     QDockWidget,
 )"""
 
-from libraryWidget import LibraryWidget
+from libraryWidget import LibraryWidget, clearLayout
 from configWindow import ConfigWindow
 from version import NAME, APPNAME, QT, VERSION
 import qrc_resources
@@ -429,8 +429,9 @@ class MainAppWindow(QtWidgets.QMainWindow):
         """ insert doc here"""
         if self.editToolBar.isEnabled():
             self.library.read()
-            self.library.libraryLayout.removeWidget(self.library.libraryArea)
-            self.library.libraryArea.close()
+            #self.library.libraryLayout.removeWidget(self.library.libraryArea)
+            #self.library.libraryArea.close()
+            clearLayout(self.library.libraryLayout)
             self.library.display()
             self.library.libraryLayout.addWidget(self.library.libraryArea)
         else:
