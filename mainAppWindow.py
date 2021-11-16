@@ -13,21 +13,11 @@ import sys
 import subprocess
 from functools import partial
 from math import floor
-from pathlib import Path
+# from pathlib import Path
 
-from PyQt6 import QtCore # Qt, QObject, Signal
-from PyQt6 import QtGui # QIcon, QKeySequence, QAction
+from PyQt6 import QtCore  # Qt, QObject, Signal
+from PyQt6 import QtGui  # QIcon, QKeySequence, QAction
 from PyQt6 import QtWidgets
-""""
-    QLabel,
-    QMainWindow,
-    QMenu,
-    QToolBar,
-    QStyle,
-    QFileDialog,
-    QDockWidget,
-)"""
-
 from libraryWidget import LibraryWidget, clearLayout
 from configWindow import ConfigWindow
 from version import NAME, APPNAME, QT, VERSION
@@ -36,19 +26,20 @@ import qrc_resources
 
 class MainAppWindow(QtWidgets.QMainWindow):
     """Main window of the Mooring Simulator application
-    The MainWindows class inherits from QtWidgets.QMainWindow which is a prefabricated widget providing
-    many standard window features that are used in the application, including toolbars, menus, a status bar and more,
+    The MainWindows class inherits from QtWidgets.QMainWindow which is a
+    prefabricated widget providing many standard window features that are
+    used in the application, including toolbars, menus, a status bar and more,
     menus, status bar, dockable widgets and more
     """
 
-    # defined a signal named trigger as class attribute, used to display info on status bar
-    # experimental...
+    # defined a signal named trigger as class attribute, used to display info
+    # on status bar, experimental...
     trigger = QtCore.pyqtSignal()
 
     def __init__(self, library_file_name='', file_name=''):
         """In the class initializer .__init__(), you first call the parent class
-        QMainWindow initializer using super(). Then you set the title of the window 
-        using .setWindowTitle() and resize the window using .resize()
+        QMainWindow initializer using super(). Then you set the title of the
+        window using .setWindowTitle() and resize the window using .resize()
         """
         super(MainAppWindow, self).__init__()
         self.setWindowTitle(f"{NAME} v{VERSION} ({QT})")
@@ -60,22 +51,25 @@ class MainAppWindow(QtWidgets.QMainWindow):
         self.fileName = file_name
         self.libraryFileName = library_file_name
 
-        # The window’s central widget is a QLabel object that you’ll use to show
-        # messages in response to certain user actions. These messages will display
-        # at the center of the window. To do this, you call .setAlignment() on the
+        # The window’s central widget is a QLabel object that you’ll use to
+        # show messages in response to certain user actions.
+        # These messages will display at the center of the window.
+        # To do this, you call .setAlignment() on the
         # QLabel object with a couple of alignment flags.
         self.centralWidget = QtWidgets.QLabel(
             f"Hello, welcome inside {NAME}, enjoy!")
         # PyQt5
-        self.centralWidget.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter | 
+        self.centralWidget.setAlignment(
+            QtCore.Qt.AlignmentFlag.AlignHCenter |
             QtCore.Qt.AlignmentFlag.AlignVCenter)
         # PySide6
-        #self.centralWidget.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+        # self.centralWidget.setAlignment(
+        #   QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
         self.setCentralWidget(self.centralWidget)
 
-        # Note that you call ._createActions() before you call ._createMenuBar() and
-        # ._createToolBars() because you’ll be using these actions on your menus and
-        # toolbars.
+        # Note that you call ._createActions() before you call
+        # ._createMenuBar() and ._createToolBars() because you’ll be using
+        # these actions on your menus and toolbars.
         self._createActions()
         self._createMenuBar()
         self._createToolBars()
@@ -88,30 +82,35 @@ class MainAppWindow(QtWidgets.QMainWindow):
         self._connectActions()
         self._createStatusBar()
 
-        # need to be modify because the path of the library is defined in the config file now
-        # if library = args.lib not empty, load library directly
+        # need to be modify because the path of the library is defined in the
+        # config file now if library = args.lib not empty, load library
+        # directly
         if self.libraryFileName:
             self.loadLibrary()
 
     def _createMenuBar(self):
-        """In a PyQt main window–style application, QMainWindow provides an empty 
-        QMenuBar object by default. To get access to this menu bar, you need to 
-        call .menuBar() on your QMainWindow object. This method will return an 
-        empty menu bar. The parent for this menu bar will be your main window object."""
+        """In a PyQt main window–style application, QMainWindow provides an
+        empty QMenuBar object by default. To get access to this menu bar,
+        you need to call .menuBar() on your QMainWindow object.
+        This method will return an empty menu bar.
+        The parent for this menu bar will be your main window object."""
 
-        # This is the preferred way of creating a menu bar in PyQt. Here, the menuBar
-        # variable will hold an empty menu bar, which will be your main window’s menu bar.
+        # This is the preferred way of creating a menu bar in PyQt. Here, the
+        #  menuBar variable will hold an empty menu bar, which will be your
+        # *main window’s menu bar.
         menuBar = self.menuBar()
 
         # File menu
-        # If you use the first option, then you need to create your custom QMenu objects
-        # first. To do that, you can use one of the following constructors:
+        # If you use the first option, then you need to create your custom
+        # QMenu objects first.
+        # To do that, you can use one of the following constructors:
         #   QMenu(parent)
         #   QMenu(title, parent)
-        # In both cases, parent is the QWidget that will hold the ownership of the QMenu
-        # object. You’ll typically set parent to the window in which you’ll use the menu.
-        # In the second constructor, title will hold a string with a text that describes
-        # the menu option.
+        # In both cases, parent is the QWidget that will hold the ownership of
+        # the QMenu object. You’ll typically set parent to the window in which
+        # you’ll use the menu.
+        # In the second constructor, title will hold a string with a text that
+        # describes the menu option.
 
         # Creating menus using a QMenu object
         fileMenu = QtWidgets.QMenu("&File", self)
@@ -120,13 +119,15 @@ class MainAppWindow(QtWidgets.QMainWindow):
         fileMenu.addAction(self.openAction)
         # Creating menus using a title
         self.openRecentMenu = fileMenu.addMenu("Open Recent")
-        # You can add actions to a QMenu object using .addAction(). This method has
-        # several variations. Most of them are thought to create actions on the fly.
+        # You can add actions to a QMenu object using .addAction().
+        # This method has several variations. Most of them are thought
+        # to create actions on the fly.
         # We use a variation of .addAction() that QMenu inherits from QWidget:
         # QWidget.addAction(action)
-        # The argument action represents the QAction object that you want to add to
-        # a given QWidget object. With this variation of .addAction(), you can create
-        # your actions beforehand and then add them to your menus as needed.
+        # The argument action represents the QAction object that you want
+        # to add to a given QWidget object. With this variation of
+        # .addAction(), you can create your actions beforehand and then add
+        # them to your menus as needed.
         fileMenu.addAction(self.saveAction)
         # Separator
         fileMenu.addSeparator()
@@ -167,11 +168,12 @@ class MainAppWindow(QtWidgets.QMainWindow):
         helpMenu.addAction(self.aboutAction)
 
     def _createToolBars(self):
-        # A toolbar is a movable panel that holds buttons and other widgets to provide
-        # fast access to the most common options of a GUI application. Toolbar buttons
-        # can display icons, text, or both to represent the task that they perform.
-        # The base class for toolbars in PyQt is QToolBar. This class will allow you to
-        # create custom toolbars for your GUI applications.
+        # A toolbar is a movable panel that holds buttons and other widgets
+        # to provide fast access to the most common options of a GUI
+        # application. Toolbar buttons can display icons, text, or both
+        # to represent the task that they perform.
+        # The base class for toolbars in PyQt is QToolBar. This class will
+        # allow you to create custom toolbars for your GUI applications.
 
         # Create File toolbar using a title
         fileToolBar = self.addToolBar("File")
@@ -182,7 +184,8 @@ class MainAppWindow(QtWidgets.QMainWindow):
 
         # Create Edit toolbar using a QToolBar object
         self.editToolBar = QtWidgets.QToolBar("Edit", self)
-        # inserts a QToolBar object (toolbar) into the specified toolbar area (area).
+        # inserts a QToolBar object (toolbar) into the specified toolbar area
+        # (area).
         # self.addToolBar(QtCore.Qt.LeftToolBarArea, editToolBar)
         self.addToolBar(self.editToolBar)
         self.editToolBar.addAction(self.copyAction)
@@ -201,8 +204,9 @@ class MainAppWindow(QtWidgets.QMainWindow):
         libraryToolBar.addAction(self.openExcelLibraryAction)
 
         # Adding Widgets to a Toolbar
-        # First import the spin box class. Then create a QSpinBox object, set its
-        # focusPolicy to Qt.NoFocus, and finally add it to the library toolbar.
+        # First import the spin box class. Then create a QSpinBox object,
+        # set its focusPolicy to Qt.NoFocus, and finally add it to the
+        # library toolbar.
         # self.fontSizeSpinBox = QSpinBox()
         # self.fontSizeSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
         # libraryToolBar.addWidget(self.fontSizeSpinBox)
@@ -239,11 +243,16 @@ class MainAppWindow(QtWidgets.QMainWindow):
         self.newAction.setWhatsThis("Create a new and empty mooring")
 
         # Edit actions
-        self.copyAction = QtGui.QAction(QtGui.QIcon(":edit-copy.png"), "&Copy", self)
-        self.pasteAction = QtGui.QAction(QtGui.QIcon(":edit-paste.png"), "&Paste", self)
-        self.cutAction = QtGui.QAction(QtGui.QIcon(":edit-cut.png"), "C&ut", self)
-        self.zoomInAction = QtGui.QAction(QtGui.QIcon(":zoom-in.png"), "Zoom in", self)
-        self.zoomOutAction = QtGui.QAction(QtGui.QIcon(":zoom-out.png"), "Zoom out", self)
+        self.copyAction = QtGui.QAction(
+            QtGui.QIcon(":edit-copy.png"), "&Copy", self)
+        self.pasteAction = QtGui.QAction(
+            QtGui.QIcon(":edit-paste.png"), "&Paste", self)
+        self.cutAction = QtGui.QAction(
+            QtGui.QIcon(":edit-cut.png"), "C&ut", self)
+        self.zoomInAction = QtGui.QAction(
+            QtGui.QIcon(":zoom-in.png"), "Zoom in", self)
+        self.zoomOutAction = QtGui.QAction(
+            QtGui.QIcon(":zoom-out.png"), "Zoom out", self)
         # Standard key sequence
         self.copyAction.setShortcut(QtGui.QKeySequence.StandardKey.Copy)
         self.pasteAction.setShortcut(QtGui.QKeySequence.StandardKey.Paste)
@@ -313,24 +322,27 @@ class MainAppWindow(QtWidgets.QMainWindow):
 
     def _connectActions(self):
         """Connecting Signals and Slots in Menus and Toolbars
-        In PyQt, you use signals and slots to provide functionality to your GUI 
-        applications. PyQt widgets emit signals every time an event such as a mouse 
-        click, a keypress, or a window resizing, occurs on them.
+        In PyQt, you use signals and slots to provide functionality to your GUI
+        applications. PyQt widgets emit signals every time an event such as
+        a mouse click, a keypress, or a window resizing, occurs on them.
 
-        A slot is a Python callable that you can connect to a widget’s signal to perform 
-        some actions in response to user events. If a signal and a slot are connected, 
-        then the slot will be called automatically every time the signal is emitted.
+        A slot is a Python callable that you can connect to a widget’s signal
+        to perform some actions in response to user events. If a signal and
+        a slot are connected, then the slot will be called automatically every
+        time the signal is emitted.
 
-        Slot is a Python callable. In other words, slot can be a function, a method, 
-        a class, or an instance of a class that implements .__call__()."""
+        Slot is a Python callable. In other words, slot can be a function,
+        a method, a class, or an instance of a class that implements
+        .__call__()."""
 
         # Connect File actions
         self.newAction.triggered.connect(self.newFile)
         self.openAction.triggered.connect(self.openFile)
         self.saveAction.triggered.connect(self.saveFile)
-        # In the case of exitAction, you connect its triggered() signal with the built-in
-        # slot QMainWindow.close().
-        # This way, if you select File → Exit, then your application will close.
+        # In the case of exitAction, you connect its triggered() signal
+        # with the built-in slot QMainWindow.close().
+        # This way, if you select File → Exit, then your application will
+        # close.
         self.exitAction.triggered.connect(self.close)
 
         # Connect Edit actions
@@ -429,8 +441,8 @@ class MainAppWindow(QtWidgets.QMainWindow):
         """ insert doc here"""
         if self.editToolBar.isEnabled():
             self.library.read()
-            #self.library.libraryLayout.removeWidget(self.library.libraryArea)
-            #self.library.libraryArea.close()
+            # self.library.libraryLayout.removeWidget(self.library.libraryArea)
+            # self.library.libraryArea.close()
             clearLayout(self.library.libraryLayout)
             self.library.display()
             self.library.libraryLayout.addWidget(self.library.libraryArea)
