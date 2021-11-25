@@ -32,7 +32,7 @@ We will use VSC as a development tool with conda and python 3.8
 ```sh
 conda create -n ms2 python=3.8
 conda activate ms2
-conda install -c conda-forge appdirs toml xlrd
+conda install -c conda-forge appdirs toml xlrd pyinstaller
 pip install PyQt5 qt5-applications qt5-tools
 
 ```

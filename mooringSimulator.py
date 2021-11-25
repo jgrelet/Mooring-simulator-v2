@@ -12,8 +12,8 @@ import sys
 from os import path
 from pathlib import Path
 import argparse
-from PyQt6 import QtGui # QIcon, QPixmap
-from PyQt6 import QtWidgets # QApplication
+from PyQt6 import QtGui  # QIcon, QPixmap
+from PyQt6 import QtWidgets  # QApplication
 
 from logger import configure_logger
 from mainAppWindow import MainAppWindow
