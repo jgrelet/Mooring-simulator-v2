@@ -8,7 +8,6 @@
     <file alias="edit-copy.png">resources/edit-copy.png</file>
     <file alias="edit-cut.png">resources/edit-cut.png</file>
     <file alias="edit-paste.png">resources/edit-paste.png</file>
-    <file alias="edit-paste.png">resources/edit-paste.png</file>
     <file alias="zoom-in.png">resources/zoom-in.png</file>
     <file alias="zoom-out.png">resources/zoom-out.png</file>
     <file alias="windows-main.ico">resources/windows-main.ico</file>

@@ -29,7 +29,7 @@ from PySide6.QtWidgets import (
 from library_widget import LibraryWidget
 from config_window import ConfigWindow
 from version import NAME, APPNAME, VERSION
-# import qrc_resources
+import qrc_resources
 
 
 class MainAppWindow(QMainWindow, QObject):
