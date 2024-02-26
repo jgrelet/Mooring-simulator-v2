@@ -16,7 +16,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication
 
 from logger import configure_logger
-from mainAppWindow import MainAppWindow
+from main_app_window import MainAppWindow
 
 
 def process_args():
@@ -46,11 +46,8 @@ def process_args():
                         action='store_true')
     return parser
 
-
-# main function
+# Mooring simulator main program entry point
 if __name__ == "__main__":
-    """Mooring simulator main program entry point
-    """
 
     # Create the application handler
     app = QApplication([])
@@ -62,26 +59,27 @@ if __name__ == "__main__":
     args = p.parse_args()
 
     # start logging
-    #logger = configure_logger(stream_level='DEBUG' if args.debug else 'INFO', debug_file=Path(appName).with_suffix('.log'))
+    #logger = configure_logger(stream_level='DEBUG' if args.debug else 'INFO', 
+    # debug_file=Path(appName).with_suffix('.log'))
     #global logger
     logger = configure_logger(stream_level='DEBUG' if args.debug else 'INFO',
                               debug_file=Path(appName).with_suffix('.log') if args.log else None)
     logger.info("The program starts")
 
     # Create and show the main application window
-    #mainAppWindow = MainAppWindow('test_logging')
-    mainAppWindow = MainAppWindow()
+    #main_app_window = Main_app_window('test_logging')
+    main_app_window = MainAppWindow()
 
     # load command line given library
     if args.lib is None:
-        mainAppWindow.library = path.normpath(
-            mainAppWindow.cfg['config']['library'])
+        main_app_window.library = path.normpath(
+            main_app_window.cfg['config']['library'])
     else:
-        mainAppWindow.library = args.lib
+        main_app_window.library = args.lib
 
     # reset config file
     if args.reset:
-        mainAppWindow.cfg.saveDefaultConfig()
+        main_app_window.cfg.save_default_config()
         #cfg = toml.load(theConfig)
 
     # Create and show splash screen
@@ -99,32 +97,34 @@ if __name__ == "__main__":
     # Set application window size, 800 x 600 by default
     if len(args.size) == 1:
         screen_resolution = app.desktop().screenGeometry()
-        mainAppWindow.cfg['global']['screenWidth'], mainAppWindow.cfg['global']['screenHeight'] = \
+        main_app_window.cfg['global']['screen_width'], 
+        main_app_window.cfg['global']['screen_height'] = \
             screen_resolution.width(), screen_resolution.height()
     elif len(args.size) == 2:
-        mainAppWindow.cfg['global']['screenWidth'], mainAppWindow.cfg['global']['screenHeight'] = \
+        main_app_window.cfg['global']['screen_width'], 
+        main_app_window.cfg['global']['screen_height'] = \
             args.size[0], args.size[1]
     else:
         pass
 
-    mainAppWindow.show()
+    main_app_window.show()
     # Close the splash screen
-    # splash.finish(mainAppWindow)
+    # splash.finish(main_app_window)
 
     # Run the event loop
     ret = app.exec_()
 
     # GetmainWindow. the main windows size and update configuration for next use
-    #mainAppWindow.cfg['global']['screenWidth'] = mainAppWindow.frameGeometry().width()
-    #mainAppWindow.cfg['global']['screenHeight'] = mainAppWindow.frameGeometry().height()
+    #main_app_window.cfg['global']['screen_width'] = main_app_window.frameGeometry().width()
+    #main_app_window.cfg['global']['screen_height'] = main_app_window.frameGeometry().height()
 
     # Debug config, just for testing, change debug value each time of the program is started
-    debug = mainAppWindow.cfg['global']['debug']
-    mainAppWindow.cfg['global']['debug'] = not debug
+    debug = main_app_window.cfg['global']['debug']
+    main_app_window.cfg['global']['debug'] = not debug
 
     # Save current config
-    mainAppWindow.cfg.saveConfig()
-    logger.debug(mainAppWindow.cfg)
+    main_app_window.cfg.save_config()
+    logger.debug(main_app_window.cfg)
 
     # Exit
     logger.info("End of the program ...")

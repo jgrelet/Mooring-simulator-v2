@@ -12,7 +12,6 @@ import logging
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (
     QWidget,
-    QTabWidget,
     QVBoxLayout,
     QLabel,
     QMdiArea,
@@ -35,21 +34,22 @@ class LibraryWidget(QWidget):
         Args:
             filename (string): The Excel .xls library file
         """
-        super(QWidget, self).__init__()
+        #super(QWidget, self).__init__()
+        super(LibraryWidget, self).__init__()
 
         self.__logger = logging.getLogger(NAME)
 
-        self.fileName = filename
-        self.libraryLayout = QVBoxLayout(self)
+        self.file_name = filename
+        self.library_layout = QVBoxLayout(self)
 
         # convert Excel to JSON to python dict
         self.library = self.read()
 
         # Initialize tab screen
         #self.tabWidget = QTabWidget()
-        self.libraryArea = self.display()
-        self.libraryLayout.addWidget(self.libraryArea)
-        self.setLayout(self.libraryLayout)
+        self.library_area = self.display()
+        self.library_layout.addWidget(self.library_area)
+        self.setLayout(self.library_layout)
         self.resize(400, 201)
         #sheet_names = library.worksheets
 
@@ -59,7 +59,7 @@ class LibraryWidget(QWidget):
         Returns:
             dict: a dictionary description of the library file
         """
-        return excel2json(self.fileName)
+        return excel2json(self.file_name)
 
     def display(self):
         """Display library inside MDI window in table panel
@@ -67,21 +67,21 @@ class LibraryWidget(QWidget):
         Returns:
             QMdiArea: an instance of a QMdiArea object
         """
-        libraryArea = QMdiArea(self)
+        library_area = QMdiArea(self)
         library = self.library.toDict()
         for worksheet in self.library.worksheets:
-            libraryWidget = QWidget()
-            cate = libraryArea.addSubWindow(libraryWidget)
+            library_widget = QWidget()
+            cate = library_area.addSubWindow(library_widget)
             cate.setWindowTitle(worksheet)
             cate.setWindowIcon(QIcon('exit24.png'))
             # display each subwindows with tab layout
-            libraryArea.setViewMode(1)
-            groupLayout = QVBoxLayout()
-            scrollArea = QScrollArea()
-            groupLayout.addWidget(scrollArea)
-            scrolledWidget = QWidget()
+            library_area.setViewMode(1)
+            group_layout = QVBoxLayout()
+            scroll_area = QScrollArea()
+            group_layout.addWidget(scroll_area)
+            scrolled_widget = QWidget()
             # display the first layout grid with desciption (names) of each column
-            grid = QGridLayout(scrolledWidget)
+            grid = QGridLayout(scrolled_widget)
             names = list(library[worksheet]['1'].keys())
             for col, name in enumerate(names):
                 label = QLabel(name)
@@ -94,16 +94,17 @@ class LibraryWidget(QWidget):
                 columns = list(library[worksheet][row].keys())
                 for col, name in enumerate(columns):
                     self.__logger.debug(
-                        f"col: {col}, {type(col)},name: {name}, {type(name)}")
+                        "col: %d, %s, name: %s, %s", col, type(col), name, type(name))
                     label = QLabel(str(library[worksheet][row][name]))
                     color = 'black' if col else 'red'
                     if not ind_row:
                         color = 'green'
-                    styleSheet = f"background-color : white; color : {color}; border: 1px solid black"
-                    label.setStyleSheet(styleSheet)
+                    style_sheet = \
+                        f"background-color : white; color : {color}; border: 1px solid black"
+                    label.setStyleSheet(style_sheet)
                     grid.addWidget(label, 1+ind_row, col)
             grid.setSpacing(0)
-            scrollArea.setWidget(scrolledWidget)
-            libraryWidget.setLayout(groupLayout)
+            scroll_area.setWidget(scrolled_widget)
+            library_widget.setLayout(group_layout)
 
-        return libraryArea
+        return library_area
