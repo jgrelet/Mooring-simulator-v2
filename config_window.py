@@ -58,8 +58,7 @@ class ConfigWindow(QWidget):
         if key not in self.__cfg:
             self.__logger.warning("invalid key: \"%s\"", key)
             return None
-        else:
-            return self.__cfg[key]
+        return self.__cfg[key]
 
     def __str__(self):
         config_str = f"\n\
