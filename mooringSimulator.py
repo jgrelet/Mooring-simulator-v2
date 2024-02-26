@@ -12,14 +12,14 @@ import sys
 from os import path
 from pathlib import Path
 import argparse
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication
 
 from logger import configure_logger
 from mainAppWindow import MainAppWindow
 
 
-def processArgs():
+def process_args():
     """Process optional command line argument
 
     Returns:
@@ -58,8 +58,8 @@ if __name__ == "__main__":
     appName = Path(__file__).with_suffix('').stem
 
     # Recover and process optionnal line arguments
-    parser = processArgs()
-    args = parser.parse_args()
+    p = process_args()
+    args = p.parse_args()
 
     # start logging
     #logger = configure_logger(stream_level='DEBUG' if args.debug else 'INFO', debug_file=Path(appName).with_suffix('.log'))

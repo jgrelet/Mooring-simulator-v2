@@ -1,8 +1,7 @@
 """ConfigWindow class, part of Mooring simulator PyQt5 application."""
 
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import QSize, Qt, QObjectCleanupHandler  # , QObject, pyqtSignal
-from functools import partial
+from PyQt5.QtWidgets import * # QWidget, QVBoxLayout
+from PyQt5.QtCore import QSize, Qt, QObjectCleanupHandler
 from os import path, makedirs
 from pathlib import Path
 import toml
@@ -14,6 +13,7 @@ from logger import configure_logger
 
 class ConfigWindow(QWidget):
     ''' This class display configuration window, and save in toml file
+        TODOs: reset main windows with new dimensions 
     '''
 
     def __init__(self, appName, version):
@@ -42,9 +42,9 @@ class ConfigWindow(QWidget):
         self.setFixedSize(QSize(250, 200))
 
         # Create the stacked layout
-        #self.stackedLayout = QStackedLayout()
+        # self.stackedLayout = QStackedLayout()
 
-       # overloading operators
+    # overloading operators
     def __getitem__(self, key):
         ''' overload r[key] '''
         if key not in self.__cfg:
