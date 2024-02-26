@@ -12,8 +12,8 @@ import sys
 from os import path
 from pathlib import Path
 import argparse
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QApplication
+from PySide6.QtGui import QIcon, QPixmap
+from PySide6.QtWidgets import QApplication
 
 from logger import configure_logger
 from main_app_window import MainAppWindow
@@ -112,7 +112,7 @@ if __name__ == "__main__":
     # splash.finish(main_app_window)
 
     # Run the event loop
-    ret = app.exec_()
+    ret = app.exec()
 
     # GetmainWindow. the main windows size and update configuration for next use
     #main_app_window.cfg['global']['screen_width'] = main_app_window.frameGeometry().width()

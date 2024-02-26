@@ -14,10 +14,9 @@ import subprocess
 from functools import partial
 from math import floor
 
-from PyQt5.QtCore import Qt, QObject, pyqtSignal
-from PyQt5.QtGui import QIcon, QKeySequence
-from PyQt5.QtWidgets import (
-    QAction,
+from PySide6.QtCore import Qt, QObject, Signal
+from PySide6.QtGui import QIcon, QKeySequence, QAction
+from PySide6.QtWidgets import (
     QLabel,
     QMainWindow,
     QMenu,
@@ -42,7 +41,7 @@ class MainAppWindow(QMainWindow, QObject):
 
     # defined a signal named trigger as class attribute, used to display info on status bar
     # experimental...
-    trigger = pyqtSignal()
+    trigger = Signal()
 
     def __init__(self, library_file_name='', file_name=''):
         """In the class initializer .__init__(), you first call the parent class
@@ -480,7 +479,7 @@ class MainAppWindow(QMainWindow, QObject):
     def about(self):
         """ insert doc here"""
         # Logic for showing an about dialog content goes here...
-        self.central_widget.setText(f"<b>{NAME}:</b> {VERSION}")
+        self.central_widget.setText(f"<b>{NAME}:</b> {VERSION} - Build with PySide6")
 
     def populate_open_recent(self):
         """ insert doc here"""

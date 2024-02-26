@@ -9,8 +9,8 @@
 """A class that allows to display a library of components in table panel."""
 
 import logging
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import (
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import (
     QWidget,
     QVBoxLayout,
     QLabel,
@@ -75,7 +75,7 @@ class LibraryWidget(QWidget):
             cate.setWindowTitle(worksheet)
             cate.setWindowIcon(QIcon('exit24.png'))
             # display each subwindows with tab layout
-            library_area.setViewMode(1)
+            library_area.setViewMode(QMdiArea.ViewMode.TabbedView)
             group_layout = QVBoxLayout()
             scroll_area = QScrollArea()
             group_layout.addWidget(scroll_area)

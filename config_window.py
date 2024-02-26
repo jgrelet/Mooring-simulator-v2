@@ -1,11 +1,11 @@
-"""ConfigWindow class, part of Mooring simulator PyQt5 application."""
+"""ConfigWindow class, part of Mooring simulator PySide6 application."""
 
 from os import path, makedirs
 from pathlib import Path
 import logging
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QFormLayout, QLineEdit, QComboBox
-from PyQt5.QtWidgets import QDialogButtonBox, QApplication
-from PyQt5.QtCore import QSize, Qt, QObjectCleanupHandler
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QFormLayout, QLineEdit, QComboBox
+from PySide6.QtWidgets import QDialogButtonBox, QApplication
+from PySide6.QtCore import QSize, Qt
 import toml
 from appdirs import AppDirs
 from version import NAME, AUTHOR
@@ -110,7 +110,8 @@ class ConfigWindow(QWidget):
         self.close()
         # prevent QWidget::setLayout: Attempting to set QLayout which already has a layout
         # in display_global_config::self.setLayout(dialog_layout)
-        QObjectCleanupHandler().add(self.layout())
+        # TODOS: verify below
+        # QObjectCleanupHandler().add(self.layout())
 
     def cancel(self):
         """Configuration cancelled"""
